@@ -1,5 +1,5 @@
 # COVID19 Interactive Data App
-Code used in COVID19 Streamlit app found at https://covid19-domtaylor.herokuapp.com
+Code used to build the COVID19 Streamlit app found at https://covid19-domtaylor.herokuapp.com
 
 Features of the app include:
 
