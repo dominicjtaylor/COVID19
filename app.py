@@ -4,7 +4,7 @@ import math
 import pandas as pd
 import datetime
 import time
-from IPython.display import display
+# from IPython.display import display
 from datetime import date
 from datetime import datetime
 import streamlit as st
@@ -170,6 +170,7 @@ dict_choice1 = {key: dic1[key] for key in dic1.keys() & set(dic_1.keys())}
 
 
 xmin1 = st.sidebar.selectbox('Choose a start date:',date,key='box1.1')
+print(xmin1)
 
 
 #speed = 1/(st.slider('Speed of evolution',1,20))
@@ -227,10 +228,10 @@ for label in ax1.get_xticklabels():
     label.set_rotation(45)
 for label in ax1.get_yticklabels():
     label.set_fontsize(18)
-if xmin1 is not None and not (isinstance(xmin1, str) or math.isnan(xmin1)):
-    ax1.set_xlim(xmin=xmin1)
-else:
-    st.warning("Invalid x-axis limit (xmin1) detected; skipping plt.xlim()")
+# if xmin1 is not None and not (isinstance(xmin1, str) or math.isnan(xmin1)):
+ax1.set_xlim(left=xmin1)
+# else:
+    # st.warning("Invalid x-axis limit (xmin1) detected; skipping plt.xlim()")
 # plt.xlim(xmin=xmin1)
 ax1.set_ylim(ymin=0)
 st.pyplot(fig1)
@@ -421,7 +422,7 @@ for label in ax2.get_xticklabels():
 for label in ax2.get_yticklabels():
     label.set_fontsize(18)
 ax2.set_ylim(ymin=0)
-ax2.set_xlim(xmin=xmin2)
+ax2.set_xlim(left=xmin2)
 #plt.yticks(np.arange(0,max(DCTPT)+2,2))
 st.pyplot(fig2)
 
@@ -596,7 +597,7 @@ for label in ax3.get_xticklabels():
     label.set_rotation(45)
 for label in ax3.get_yticklabels():
     label.set_fontsize(18)
-ax3.set_xlim(xmin=xmin3)
+ax3.set_xlim(left=xmin3)
 ax3.set_ylim(ymin=0)
 
 st.pyplot(fig3)
