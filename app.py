@@ -14,7 +14,7 @@ from datetime import timedelta
 import pydeck as pdk
 
 
-st.title('COVID-19')
+st.title('COVID-19 Data')
 st.info('NOTICE: Click the Sidebar to change preferences. Once the Map is in view, you must click on it for accurate location.')
 
 st.header('Daily COVID-19-related Deaths per Million')
