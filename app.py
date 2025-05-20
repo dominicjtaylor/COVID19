@@ -11,7 +11,7 @@ import streamlit as st
 import pydeck as pdk
 import altair as alt
 from datetime import timedelta
-import pydeck as pdk
+# import pydeck as pdk
 
 
 st.title('COVID-19 Data')
