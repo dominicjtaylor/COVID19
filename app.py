@@ -222,8 +222,11 @@ for i in dict_choice1.values():
 #plt.xlabel('Date',fontsize=16)
 ax1.set_ylabel('Daily Deaths per Million',fontsize=22)
 ax1.legend(fontsize=22)
-ax1.set_xticklabels(fontsize=18,rotation=45)
-ax1.set_yticklabels(fontsize=18)
+for label in ax1.get_xticklabels():
+    label.set_fontsize(18)
+    label.set_rotation(45)
+for label in ax1.get_yticklabels():
+    label.set_fontsize(18)
 if xmin1 is not None and not (isinstance(xmin1, str) or math.isnan(xmin1)):
     ax1.set_xlim(xmin=xmin1)
 else:
@@ -410,8 +413,13 @@ for i in dict_choice2.values():
 #plt.xlabel('Date',fontsize=16)
 ax2.set_ylabel('Daily Tests per Thousand',fontsize=20)
 ax2.legend(fontsize=20)
-ax2.set_xticklabels(fontsize=16,rotation=45)
-ax2.set_yticklabels(fontsize=16)
+# ax2.set_xticklabels(fontsize=16,rotation=45)
+# ax2.set_yticklabels(fontsize=16)
+for label in ax2.get_xticklabels():
+    label.set_fontsize(18)
+    label.set_rotation(45)
+for label in ax2.get_yticklabels():
+    label.set_fontsize(18)
 ax2.set_ylim(ymin=0)
 ax2.set_xlim(xmin=xmin2)
 #plt.yticks(np.arange(0,max(DCTPT)+2,2))
@@ -581,8 +589,13 @@ for i in dict_choice3.values():
 #plt.xlabel('Date',fontsize=16)
 ax3.set_ylabel('Daily Cases per Million',fontsize=20)
 ax3.legend(fontsize=20)
-ax3.set_xticklabels(fontsize=16,rotation=45)
-ax3.set_yticklabels(fontsize=16)
+# ax3.set_xticklabels(fontsize=16,rotation=45)
+# ax3.set_yticklabels(fontsize=16)
+for label in ax3.get_xticklabels():
+    label.set_fontsize(18)
+    label.set_rotation(45)
+for label in ax3.get_yticklabels():
+    label.set_fontsize(18)
 ax3.set_xlim(xmin=xmin3)
 ax3.set_ylim(ymin=0)
 
