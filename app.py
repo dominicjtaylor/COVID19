@@ -222,7 +222,7 @@ for i in dict_choice1.values():
 plt.ylabel('Daily Deaths per Million',fontsize=22)
 plt.legend(fontsize=22)
 plt.xticks(fontsize=18,rotation=45)
-lt.yticks(fontsize=18)
+plt.yticks(fontsize=18)
 if xmin1 is not None and not (isinstance(xmin1, str) or math.isnan(xmin1)):
     plt.xlim(xmin=xmin1)
 else:
