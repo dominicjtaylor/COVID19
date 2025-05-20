@@ -170,6 +170,7 @@ dict_choice1 = {key: dic1[key] for key in dic1.keys() & set(dic_1.keys())}
 
 
 xmin1 = st.sidebar.selectbox('Choose a start date:',date,key='box1.1')
+xmin1_dt = pd.to_datetime(xmin1)
 
 
 #speed = 1/(st.slider('Speed of evolution',1,20))
@@ -228,7 +229,7 @@ for label in ax1.get_xticklabels():
 for label in ax1.get_yticklabels():
     label.set_fontsize(18)
 # if xmin1 is not None and not (isinstance(xmin1, str) or math.isnan(xmin1)):
-ax1.set_xlim(left=xmin1)
+ax1.set_xlim(left=xmin1_dt)
 # else:
     # st.warning("Invalid x-axis limit (xmin1) detected; skipping plt.xlim()")
 # plt.xlim(xmin=xmin1)
@@ -362,6 +363,7 @@ for name, name_df in list22:
 dict_choice2 = {key: dic2[key] for key in dic2.keys() & set(dic_2.keys())}
 
 xmin2 = st.sidebar.selectbox('Choose a start date:',date,key='box2.1')
+xmin2_dt = pd.to_datetime(xmin2)
 
 
 #speed = 1/(st.slider('Speed of evolution',1,20))
@@ -421,7 +423,7 @@ for label in ax2.get_xticklabels():
 for label in ax2.get_yticklabels():
     label.set_fontsize(18)
 ax2.set_ylim(ymin=0)
-ax2.set_xlim(left=xmin2)
+ax2.set_xlim(left=xmin2_dt)
 #plt.yticks(np.arange(0,max(DCTPT)+2,2))
 st.pyplot(fig2)
 
@@ -538,6 +540,7 @@ for name, name_df in list33:
 dict_choice3 = {key: dic3[key] for key in dic3.keys() & set(dic_3.keys())}
 
 xmin3 = st.sidebar.selectbox('Choose a start date:',date,key='box3.1')
+xmin3_dt = pd.to_datetime(xmin3)
 
 
 #speed = 1/(st.slider('Speed of evolution',1,20))
@@ -596,7 +599,7 @@ for label in ax3.get_xticklabels():
     label.set_rotation(45)
 for label in ax3.get_yticklabels():
     label.set_fontsize(18)
-ax3.set_xlim(left=xmin3)
+ax3.set_xlim(left=xmin3_dt)
 ax3.set_ylim(ymin=0)
 
 st.pyplot(fig3)
