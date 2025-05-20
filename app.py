@@ -214,22 +214,23 @@ if st.button('Show Evolving Map',key='1.3'):
         time.sleep(0.1)
 
 
-fig = plt.figure(figsize=(14,10))
+# fig1 = plt.figure(figsize=(14,10))
+fig1, ax1 = plt.subplots(figsize=(14,10))
 
 for i in dict_choice1.values():
-    plt.plot(pd.to_datetime(i['Date'], format = '%Y-%m-%d'),i['New Deaths per Million'],label=i['Country'].to_list()[0])
+    ax1.plot(pd.to_datetime(i['Date'], format = '%Y-%m-%d'),i['New Deaths per Million'],label=i['Country'].to_list()[0])
 #plt.xlabel('Date',fontsize=16)
-plt.ylabel('Daily Deaths per Million',fontsize=22)
-plt.legend(fontsize=22)
-plt.xticks(fontsize=18,rotation=45)
-plt.yticks(fontsize=18)
+ax1.set_ylabel('Daily Deaths per Million',fontsize=22)
+ax1.legend(fontsize=22)
+ax1.set_xticks(fontsize=18,rotation=45)
+ax1.set_yticks(fontsize=18)
 if xmin1 is not None and not (isinstance(xmin1, str) or math.isnan(xmin1)):
-    plt.xlim(xmin=xmin1)
+    ax1.set_xlim(xmin=xmin1)
 else:
     st.warning("Invalid x-axis limit (xmin1) detected; skipping plt.xlim()")
 # plt.xlim(xmin=xmin1)
-plt.ylim(ymin=0)
-st.pyplot()
+ax1.set_ylim(ymin=0)
+st.pyplot(fig1)
 
 
 ############################################################################################################################
@@ -402,19 +403,19 @@ if st.button('Show Evolving Map',key='2.3'):
         time.sleep(0.1)
     
 
-fig = plt.figure(figsize=(12,8))
+fig2, ax2 = plt.subplots(figsize=(12,8))
 
 for i in dict_choice2.values():
-    plt.plot(pd.to_datetime(i['Date'], format = '%Y-%m-%d'),i['Daily change in cumulative total per thousand'],label=i['Country'].to_list()[0])
+    ax2.plot(pd.to_datetime(i['Date'], format = '%Y-%m-%d'),i['Daily change in cumulative total per thousand'],label=i['Country'].to_list()[0])
 #plt.xlabel('Date',fontsize=16)
-plt.ylabel('Daily Tests per Thousand',fontsize=20)
-plt.legend(fontsize=20)
-plt.xticks(fontsize=16,rotation=45)
-plt.yticks(fontsize=16)
-plt.ylim(ymin=0)
-plt.xlim(xmin=xmin2)
+ax2.set_ylabel('Daily Tests per Thousand',fontsize=20)
+ax2.legend(fontsize=20)
+ax2.set_xticks(fontsize=16,rotation=45)
+ax2.set_yticks(fontsize=16)
+ax2.set_ylim(ymin=0)
+ax2.set_xlim(xmin=xmin2)
 #plt.yticks(np.arange(0,max(DCTPT)+2,2))
-st.pyplot()
+st.pyplot(fig2)
 
 
 ############################################################################################################################
@@ -573,17 +574,17 @@ if st.button('Show Evolving Map',key='3.3'):
         time.sleep(0.1)
 
 
-fig = plt.figure(figsize=(12,8))
+fig3, ax3 = plt.subplots(figsize=(12,8))
 
 for i in dict_choice3.values():
-    plt.plot(pd.to_datetime(i['Date'], format = '%Y-%m-%d'),i['New Cases per Million'],label=i['Country'].to_list()[0])
+    ax3.plot(pd.to_datetime(i['Date'], format = '%Y-%m-%d'),i['New Cases per Million'],label=i['Country'].to_list()[0])
 #plt.xlabel('Date',fontsize=16)
-plt.ylabel('Daily Cases per Million',fontsize=20)
-plt.legend(fontsize=20)
-plt.xticks(fontsize=16,rotation=45)
-plt.yticks(fontsize=16)
-plt.xlim(xmin=xmin3)
-plt.ylim(ymin=0)
+ax3.set_ylabel('Daily Cases per Million',fontsize=20)
+ax3.legend(fontsize=20)
+ax3.set_xticks(fontsize=16,rotation=45)
+ax3.set_yticks(fontsize=16)
+ax3.set_xlim(xmin=xmin3)
+ax3.set_ylim(ymin=0)
 
-st.pyplot()
+st.pyplot(fig3)
 
