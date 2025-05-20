@@ -74,8 +74,8 @@ df_locus['Latitude'] = df_locus['Latitude'].str.replace(r"[\"]", '')
 df_locus['Longitude'] = df_locus['Longitude'].str.replace(r"[\"]", '')
 df_locus['Latitude'] = df_locus['Latitude'].str.lstrip()
 df_locus['Longitude'] = df_locus['Longitude'].str.lstrip()
-df_locus['Latitude'] = pd.to_numeric(df_locus['Latitude'], downcast="float")
-df_locus['Longitude'] = pd.to_numeric(df_locus['Longitude'], downcast="float")
+df_locus['Latitude'] = pd.to_numeric(df_locus['Latitude'], downcast="float", errors='coerce')
+df_locus['Longitude'] = pd.to_numeric(df_locus['Longitude'], downcast="float", errors='coerce')
 
 
 dates = pd.date_range(start="2019-12-31",end=datetime.today()-timedelta(days=1)).to_list()
