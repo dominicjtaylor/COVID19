@@ -20,13 +20,15 @@ st.info('NOTICE: Click the Sidebar to change preferences. Once the Map is in vie
 st.header('Daily COVID-19-related Deaths per Million')
 
 
-df = pd.read_csv('https://raw.githubusercontent.com/tomwhite/covid-19-uk-data/master/data/covid-19-totals-uk.csv',error_bad_lines=False)
+# df = pd.read_csv('https://raw.githubusercontent.com/tomwhite/covid-19-uk-data/master/data/covid-19-totals-uk.csv',error_bad_lines=False)
+df = pd.read_csv('https://raw.githubusercontent.com/tomwhite/covid-19-uk-data/master/data/covid-19-totals-uk.csv',on_bad_lines='skip')
 
 df_deaths = df[['Date', 'Tests', 'ConfirmedCases', 'Deaths']]
 df_deaths = df_deaths.rename(columns={'ConfirmedCases': 'Confirmed Cases'})
 
 
-df_daily = pd.read_csv('https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv',error_bad_lines=False)
+# df_daily = pd.read_csv('https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv',error_bad_lines=False)
+df_daily = pd.read_csv('https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv',on_bad_lines='skip')
 
 df_deaths = df_daily[['location', 'date', 'new_deaths_per_million']]
 df_deaths = df_deaths.rename(columns={'location':'Country','date':'Date','new_deaths_per_million':'New Deaths per Million'})
@@ -231,7 +233,8 @@ st.header('Daily COVID-19 Tests per Thousand')
 
 
 #df = pd.read_excel('covid-testing-all-observations.xlsx')
-df = pd.read_csv('https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/testing/covid-testing-all-observations.csv',error_bad_lines=False)
+# df = pd.read_csv('https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/testing/covid-testing-all-observations.csv',error_bad_lines=False)
+df = pd.read_csv('https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/testing/covid-testing-all-observations.csv',on_bad_lines='skip')
 df_tests = df[['Entity', 'Date', 'Daily change in cumulative total per thousand']]
 #display(df_tests.head(3))
 
