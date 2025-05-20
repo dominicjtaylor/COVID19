@@ -1,8 +1,8 @@
-streamlit==0.65.2
+streamlit
 numpy
 matplotlib
 pandas
 altair
 pydeck
 ipython
-python==3.7.7
+python
