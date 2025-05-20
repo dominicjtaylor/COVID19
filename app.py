@@ -170,7 +170,6 @@ dict_choice1 = {key: dic1[key] for key in dic1.keys() & set(dic_1.keys())}
 
 
 xmin1 = st.sidebar.selectbox('Choose a start date:',date,key='box1.1')
-print(xmin1)
 
 
 #speed = 1/(st.slider('Speed of evolution',1,20))
