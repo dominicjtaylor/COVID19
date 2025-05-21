@@ -166,6 +166,7 @@ for name, name_df in list11:
     counting1.append(name)
 
 dict_choice1 = {key: dic1[key] for key in dic1.keys() & set(dic_1.keys())}
+st.write(dict_choice1)
 
 xmin1 = st.sidebar.selectbox('Choose a start date:',date,key='box1.1')
 xmin1_dt = pd.to_datetime(xmin1)
