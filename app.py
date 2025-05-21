@@ -10,12 +10,13 @@ from datetime import date, datetime, timedelta
 import streamlit as st
 import pydeck as pdk
 import altair as alt
-plt.style.use('.matplotlib/stylelib/science.mplstyle')
+from matplotlib.ticker import AutoMinorLocator
+plt.style.use('./.matplotlib/stylelib/science.mplstyle')
 # plt.style.use('default')
 # from datetime import timedelta
 
 st.title('COVID-19 Data')
-st.info('NOTICE: Click the Sidebar to change preferences. Once the Map is in view, you must click on it for accurate location.')
+st.info('Click the Sidebar to change preferences.')#Once the Map is in view, you must click on it for accurate location.')
 
 st.header('Daily COVID-19-related Deaths per Million')
 
@@ -126,7 +127,7 @@ subset_data1['Radius']=''
 
 for i in range(0,len(subset_data1)):
     # subset_data1['Radius'].iloc[i]=subset_data1['New Deaths per Million'].iloc[i]*(1.2e6)
-    subset_data1['Radius'] = subset_data1['New Deaths per Million'] * (1.2e6)
+    subset_data1['Radius'] = subset_data1['New Deaths per Million'] * (1.2e5)
 
 ###########################
 grouped1 = subset_data1.groupby(['Country'])
@@ -165,6 +166,16 @@ xmin1 = st.sidebar.selectbox('Choose a start date:',date,key='box1.1')
 xmin1_dt = pd.to_datetime(xmin1)
 
 #speed = 1/(st.slider('Speed of evolution',1,20))
+# def next_month_first(d):
+#     print('date before:',d)
+#     year = d.year
+#     month = d.month
+#     if month == 12:
+#         new_d = datetime(year+1, 1, 1)
+#     else:
+#         new_d = datetime(year, month+1, 1)
+#     print('date after:',new_d)
+#     return new_d
                   
 if st.button('Show Evolving Map',key='1.3'):
     datedate = datetime(2019,12,31)
@@ -197,42 +208,80 @@ if st.button('Show Evolving Map',key='1.3'):
 
     map = st.pydeck_chart(r)
     
-    for i in date:
-        datedate += timedelta(days=1)
-        layer.data = subset_data1[subset_data1['Date']==i]
+    date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date]
+    first_of_month_dates = [d for d in date_dt if d.day == 1]
+    for d in first_of_month_dates:
+        layer.data = subset_data1[subset_data1['Date'] == d.strftime("%Y-%m-%d")]
         r.update()
         map.pydeck_chart(r)
-        subheading.subheader("Daily Deaths per Million on : %s" % (datedate.strftime("%B %d, %Y")))
-        time.sleep(0.1)
+        subheading.subheader("Daily Deaths per Million on : %s" % (d.strftime("%B %d, %Y")))
+        time.sleep(0.15)
 
+    # for i in date:
+    #     # datedate += timedelta(days=1)
+    #     datedate = next_month_first(datedate)
+    #     layer.data = subset_data1[subset_data1['Date']==datedate]
+    #     r.update()
+    #     map.pydeck_chart(r)
+    #     subheading.subheader("Daily Deaths per Million on : %s" % (datedate.strftime("%B %d, %Y")))
+    #     time.sleep(0.1)
+
+# print(dict_choice1)
+# df = pd.DataFrame({'Date':pd.to_datetime(list(dict_choice1.values())[0]['Date'],format = '%Y-%m-%d'),
+#                    'New Deaths per Million':list(dict_choice1.values())[0]['New Deaths per Million']})
+# st.line_chart(df)
+# for i in dict_choice1.values():
+#     dates = list(pd.to_datetime(i['Date'], format = '%Y-%m-%d'))
+#     n = list(i['New Deaths per Million'])
+# print(dates)
+# print(n)
+# df = pd.DataFrame({'dates':dates,'n':n})
+# st.line_chart(df)
+dfs = []
+for country, data in dict_choice1.items():
+    df_temp = data.copy()
+    df_temp['Date'] = pd.to_datetime(df_temp['Date'], format='%Y-%m-%d')
+    df_temp = df_temp.set_index('Date')
+    df_temp = df_temp[['New Deaths per Million']].rename(columns={'New Deaths per Million': country})
+    dfs.append(df_temp)
+combined_df = pd.concat(dfs, axis=1)
+st.line_chart(combined_df)
+# chart = alt.Chart(df).mark_line().encode(
+#         x=alt.X('date:T',axis=alt.Axis(format='%b %Y')),
+#         y=alt.Y('value:Q'))
+# st.altair_chart(chart,use_container_width=True)
 
 # fig1 = plt.figure(figsize=(14,10))
-fig1, ax1 = plt.subplots(figsize=(14,10))
+#fig1, ax1 = plt.subplots(figsize=(14,10))
 
-for i in dict_choice1.values():
-    ax1.plot(pd.to_datetime(i['Date'], format = '%Y-%m-%d'),i['New Deaths per Million'],
-             label=i['Country'].to_list()[0],
-             marker=None,ls='-')
-#plt.xlabel('Date',fontsize=16)
-ax1.set_ylabel('Daily Deaths per Million',fontsize=22)
-ax1.legend(fontsize=22,frameon=False)
-for label in ax1.get_xticklabels():
-    label.set_fontsize(18)
-    label.set_rotation(45)
-for label in ax1.get_yticklabels():
-    label.set_fontsize(18)
-# if xmin1 is not None and not (isinstance(xmin1, str) or math.isnan(xmin1)):
-ax1.set_xlim(left=xmin1_dt)
-# else:
-    # st.warning("Invalid x-axis limit (xmin1) detected; skipping plt.xlim()")
-# plt.xlim(xmin=xmin1)
-# ax1.tick_params(axis='both',which='major',direction='in',length=6)
-# ax1.tick_params(axis='both',which='minor',direction='in',length=3)
-ax1.set_ylim(ymin=0)
-st.pyplot(fig1)
+#for i in dict_choice1.values():
+#    ax1.plot(pd.to_datetime(i['Date'], format = '%Y-%m-%d'),i['New Deaths per Million'],
+#             label=i['Country'].to_list()[0],
+#             marker=None,ls='-')
+##plt.xlabel('Date',fontsize=16)
+#ax1.set_ylabel('Daily Deaths per Million',fontsize=22)
+#ax1.legend(fontsize=22,frameon=False)
+## ax1.minorticks_off()
+## ax1.minorticks_on()
+#ax1.yaxis.set_minor_locator(AutoMinorLocator())
+#ax1.xaxis.set_minor_locator(AutoMinorLocator())
+#for label in ax1.get_xticklabels():
+#    label.set_fontsize(18)
+#    label.set_rotation(45)
+#for label in ax1.get_yticklabels():
+#    label.set_fontsize(18)
+## if xmin1 is not None and not (isinstance(xmin1, str) or math.isnan(xmin1)):
+#ax1.set_xlim(left=xmin1_dt)
+## else:
+#    # st.warning("Invalid x-axis limit (xmin1) detected; skipping plt.xlim()")
+## plt.xlim(xmin=xmin1)
+## ax1.tick_params(axis='both',which='major',direction='in',length=6)
+## ax1.tick_params(axis='both',which='minor',direction='in',length=3)
+#ax1.set_ylim(ymin=0)
+#st.pyplot(fig1)
 
 
-############################################################################################################################
+#############################################################################################################################
 st.header('Daily COVID-19 Tests per Thousand')
 
 
@@ -321,7 +370,7 @@ subset_data2['Radius']=''
 
 for i in range(0,len(subset_data2)):
     # subset_data2['Radius'].iloc[i]=subset_data2['Daily change in cumulative total per thousand'].iloc[i]*(3e6)
-    subset_data2['Radius'] = subset_data2['Daily change in cumulative total per thousand'] * (3e6)
+    subset_data2['Radius'] = subset_data2['Daily change in cumulative total per thousand'] * (3e5)
 
     
 ###########################
@@ -363,7 +412,7 @@ xmin2_dt = pd.to_datetime(xmin2)
 
 
 #speed = 1/(st.slider('Speed of evolution',1,20))
-                  
+
 if st.button('Show Evolving Map',key='2.3'):
     datedate = datetime(2019,12,31)
 
@@ -394,36 +443,59 @@ if st.button('Show Evolving Map',key='2.3'):
     subheading = st.subheader("")
 
     map = st.pydeck_chart(r)
-    
-    for i in date:
-        datedate += timedelta(days=1)
-        layer.data = subset_data2[subset_data2['Date']==i]
+
+    # for i in date:
+    #     # datedate += timedelta(days=1)
+    #     datedate = next_month_first(datedate)
+    #     layer.data = subset_data2[subset_data2['Date']==i]
+    #     r.update()
+    #     map.pydeck_chart(r)
+    #     subheading.subheader("Daily number of tests per thousand : %s" % (datedate.strftime("%B %d, %Y")))
+    #     time.sleep(0.1)
+
+    date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date]
+    first_of_month_dates = [d for d in date_dt if d.day == 1]
+    for d in first_of_month_dates:
+        layer.data = subset_data1[subset_data2['Date'] == d.strftime("%Y-%m-%d")]
         r.update()
         map.pydeck_chart(r)
-        subheading.subheader("Daily number of tests per thousand : %s" % (datedate.strftime("%B %d, %Y")))
-        time.sleep(0.1)
-    
+        subheading.subheader("Daily number of tests per thousand : %s" % (d.strftime("%B %d, %Y")))
+        time.sleep(0.15)
 
-fig2, ax2 = plt.subplots(figsize=(12,8))
+dfs = []
+for country, data in dict_choice2.items():
+    df_temp = data.copy()
+    df_temp['Date'] = pd.to_datetime(df_temp['Date'], format='%Y-%m-%d')
+    df_temp = df_temp.set_index('Date')
+    df_temp = df_temp[['Daily change in cumulative total per thousand']].rename(columns={'Daily change in cumulative total per thousand': country})
+    dfs.append(df_temp)
+combined_df = pd.concat(dfs, axis=1)
+st.line_chart(combined_df)
 
-for i in dict_choice2.values():
-    ax2.plot(pd.to_datetime(i['Date'], format = '%Y-%m-%d'),i['Daily change in cumulative total per thousand'],label=i['Country'].to_list()[0])
-#plt.xlabel('Date',fontsize=16)
-ax2.set_ylabel('Daily Tests per Thousand',fontsize=20)
-ax2.legend(fontsize=20,frameon=False)
-# ax2.set_xticklabels(fontsize=16,rotation=45)
-# ax2.set_yticklabels(fontsize=16)
-for label in ax2.get_xticklabels():
-    label.set_fontsize(18)
-    label.set_rotation(45)
-for label in ax2.get_yticklabels():
-    label.set_fontsize(18)
-ax2.set_ylim(ymin=0)
-ax2.set_xlim(left=xmin2_dt)
-# ax2.tick_params(axis='both',which='major',direction='in',length=6)
-# ax2.tick_params(axis='both',which='minor',direction='in',length=3)
-#plt.yticks(np.arange(0,max(DCTPT)+2,2))
-st.pyplot(fig2)
+#fig2, ax2 = plt.subplots(figsize=(12,8))
+
+#for i in dict_choice2.values():
+#    ax2.plot(pd.to_datetime(i['Date'], format = '%Y-%m-%d'),i['Daily change in cumulative total per thousand'],label=i['Country'].to_list()[0])
+##plt.xlabel('Date',fontsize=16)
+#ax2.set_ylabel('Daily Tests per Thousand',fontsize=20)
+#ax2.legend(fontsize=20,frameon=False)
+## ax2.set_xticklabels(fontsize=16,rotation=45)
+## ax2.set_yticklabels(fontsize=16)
+## ax2.minorticks_off()
+## ax2.minorticks_on()
+#ax2.yaxis.set_minor_locator(AutoMinorLocator())
+#ax2.xaxis.set_minor_locator(AutoMinorLocator())
+#for label in ax2.get_xticklabels():
+#    label.set_fontsize(18)
+#    label.set_rotation(45)
+#for label in ax2.get_yticklabels():
+#    label.set_fontsize(18)
+#ax2.set_ylim(ymin=0)
+#ax2.set_xlim(left=xmin2_dt)
+## ax2.tick_params(axis='both',which='major',direction='in',length=6)
+## ax2.tick_params(axis='both',which='minor',direction='in',length=3)
+##plt.yticks(np.arange(0,max(DCTPT)+2,2))
+#st.pyplot(fig2)
 
 
 ############################################################################################################################
@@ -575,33 +647,56 @@ if st.button('Show Evolving Map',key='3.3'):
 
     map = st.pydeck_chart(r)
     
-    for i in date:
-        datedate += timedelta(days=1)
-        layer.data = subset_data3[subset_data3['Date']==i]
+    # for i in date:
+    #     # datedate += timedelta(days=1)
+    #     datedate = next_month_first(datedate)
+    #     layer.data = subset_data3[subset_data3['Date']==i]
+    #     r.update()
+    #     map.pydeck_chart(r)
+    #     subheading.subheader("Daily Cases per Million on : %s" % (datedate.strftime("%B %d, %Y")))
+    #     time.sleep(0.1)
+
+    date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date]
+    first_of_month_dates = [d for d in date_dt if d.day == 1]
+    for d in first_of_month_dates:
+        layer.data = subset_data1[subset_data3['Date'] == d.strftime("%Y-%m-%d")]
         r.update()
         map.pydeck_chart(r)
-        subheading.subheader("Daily Cases per Million on : %s" % (datedate.strftime("%B %d, %Y")))
-        time.sleep(0.1)
+        subheading.subheader("Daily Cases per Million on : %s" % (d.strftime("%B %d, %Y")))
+        time.sleep(0.15)
 
+dfs = []
+for country, data in dict_choice3.items():
+    df_temp = data.copy()
+    df_temp['Date'] = pd.to_datetime(df_temp['Date'], format='%Y-%m-%d')
+    df_temp = df_temp.set_index('Date')
+    df_temp = df_temp[['New Cases per Million']].rename(columns={'New Cases per Million': country})
+    dfs.append(df_temp)
+combined_df = pd.concat(dfs, axis=1)
+st.line_chart(combined_df)
 
-fig3, ax3 = plt.subplots(figsize=(12,8))
+#fig3, ax3 = plt.subplots(figsize=(12,8))
 
-for i in dict_choice3.values():
-    ax3.plot(pd.to_datetime(i['Date'], format = '%Y-%m-%d'),i['New Cases per Million'],label=i['Country'].to_list()[0])
-#plt.xlabel('Date',fontsize=16)
-ax3.set_ylabel('Daily Cases per Million',fontsize=20)
-ax3.legend(fontsize=20,frameon=False)
-# ax3.set_xticklabels(fontsize=16,rotation=45)
-# ax3.set_yticklabels(fontsize=16)
-for label in ax3.get_xticklabels():
-    label.set_fontsize(18)
-    label.set_rotation(45)
-for label in ax3.get_yticklabels():
-    label.set_fontsize(18)
-ax3.set_xlim(left=xmin3_dt)
-ax3.set_ylim(ymin=0)
-# ax3.tick_params(axis='both',which='major',direction='in',length=6)
-# ax3.tick_params(axis='both',which='minor',direction='in',length=3)
+#for i in dict_choice3.values():
+#    ax3.plot(pd.to_datetime(i['Date'], format = '%Y-%m-%d'),i['New Cases per Million'],label=i['Country'].to_list()[0])
+##plt.xlabel('Date',fontsize=16)
+#ax3.set_ylabel('Daily Cases per Million',fontsize=20)
+#ax3.legend(fontsize=20,frameon=False)
+## ax3.set_xticklabels(fontsize=16,rotation=45)
+## ax3.set_yticklabels(fontsize=16)
+## ax3.minorticks_off()
+## ax3.minorticks_on()
+#ax3.yaxis.set_minor_locator(AutoMinorLocator())
+#ax3.xaxis.set_minor_locator(AutoMinorLocator())
+#for label in ax3.get_xticklabels():
+#    label.set_fontsize(18)
+#    label.set_rotation(45)
+#for label in ax3.get_yticklabels():
+#    label.set_fontsize(18)
+#ax3.set_xlim(left=xmin3_dt)
+#ax3.set_ylim(ymin=0)
+## ax3.tick_params(axis='both',which='major',direction='in',length=6)
+## ax3.tick_params(axis='both',which='minor',direction='in',length=3)
 
-st.pyplot(fig3)
+#st.pyplot(fig3)
 
