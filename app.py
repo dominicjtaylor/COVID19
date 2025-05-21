@@ -150,6 +150,8 @@ st.write('df_grouped:',df_grouped1)
 
 dic1 = {key: group for key, group in grouped1}
 st.write(type(dic1))
+for i in dic1:
+    st.write(i,type(i))
 
 ###########################    
 frame=[]
