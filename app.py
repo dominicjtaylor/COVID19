@@ -177,6 +177,7 @@ df_subset1 = pd.concat(frame, ignore_index=True).drop(columns='ISO')
 #st.write('df_subset:',df_subset)
 
 list11 = df_subset1.groupby('Country')
+st.write(list11,type(list11))
 counting1 = list(list11.groups.keys())
 
 #list11 = df_subset1.groupby('Country')
