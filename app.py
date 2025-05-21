@@ -174,10 +174,11 @@ for name, name_df in list11:
     #print(name)
     counting1.append(name)
 
-st.write('dic1 keys:',list(dic1.keys()))
-st.write('dic_1 keys:',list(dic_1.keys()))
+# st.write('dic1 keys:',list(dic1.keys()))
+# st.write('dic_1 keys:',list(dic_1.keys()))
+st.write(dic_1.keys())
 dict_choice1 = {key: dic1[key] for key in dic1.keys() & set(dic_1.keys())}
-st.write(dict_choice1)
+# st.write(dict_choice1)
 
 xmin1 = st.sidebar.selectbox('Choose a start date:',date,key='box1.1')
 xmin1_dt = pd.to_datetime(xmin1)
