@@ -5,20 +5,19 @@ import pandas as pd
 import datetime
 import time
 # from IPython.display import display
-from datetime import date
-from datetime import datetime
+from datetime import date, datetime, timedelta
+# from datetime import datetime
 import streamlit as st
 import pydeck as pdk
 import altair as alt
-from datetime import timedelta
-# import pydeck as pdk
-
+plt.style.use('.matplotlib/stylelib/science.mplstyle')
+# plt.style.use('default')
+# from datetime import timedelta
 
 st.title('COVID-19 Data')
 st.info('NOTICE: Click the Sidebar to change preferences. Once the Map is in view, you must click on it for accurate location.')
 
 st.header('Daily COVID-19-related Deaths per Million')
-
 
 # df = pd.read_csv('https://raw.githubusercontent.com/tomwhite/covid-19-uk-data/master/data/covid-19-totals-uk.csv',error_bad_lines=False)
 df = pd.read_csv('https://raw.githubusercontent.com/tomwhite/covid-19-uk-data/master/data/covid-19-totals-uk.csv',on_bad_lines='skip')
@@ -26,14 +25,12 @@ df = pd.read_csv('https://raw.githubusercontent.com/tomwhite/covid-19-uk-data/ma
 df_deaths = df[['Date', 'Tests', 'ConfirmedCases', 'Deaths']]
 df_deaths = df_deaths.rename(columns={'ConfirmedCases': 'Confirmed Cases'})
 
-
 # df_daily = pd.read_csv('https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv',error_bad_lines=False)
 df_daily = pd.read_csv('https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv',on_bad_lines='skip')
 
 df_deaths = df_daily[['location', 'date', 'new_deaths_per_million']]
 df_deaths = df_deaths.rename(columns={'location':'Country','date':'Date','new_deaths_per_million':'New Deaths per Million'})
 df_deaths = df_deaths[['Date','Country','New Deaths per Million']]
-
 
 by_entity = df_deaths.groupby(["Country"])
 
@@ -77,13 +74,11 @@ df_locus['Longitude'] = df_locus['Longitude'].str.lstrip()
 df_locus['Latitude'] = pd.to_numeric(df_locus['Latitude'], downcast="float", errors='coerce')
 df_locus['Longitude'] = pd.to_numeric(df_locus['Longitude'], downcast="float", errors='coerce')
 
-
 dates = pd.date_range(start="2019-12-31",end=datetime.today()-timedelta(days=1)).to_list()
 date = []
 for i in dates:
     string = i.strftime("%Y-%m-%d")
     date.append(string)
-
 
 list_country = df_locus.groupby('Country')
 countries = []
@@ -114,7 +109,6 @@ dic_1 = {}
 for x in count:
     dic_1["{0}".format(x)]=list.get_group(x)
 
-
 for n in count:
     latt = dic_1[n].loc[dic_1[n]['Country'] == n, 'Latitude'].iloc[0]
     lonn = dic_1[n].loc[dic_1[n]['Country'] == n, 'Longitude'].iloc[0]
@@ -131,9 +125,9 @@ subset_data1 = subset_data1.drop(columns='index')
 subset_data1['Radius']=''
 
 for i in range(0,len(subset_data1)):
-    subset_data1['Radius'].iloc[i]=subset_data1['New Deaths per Million'].iloc[i]*(1.2e6)
+    # subset_data1['Radius'].iloc[i]=subset_data1['New Deaths per Million'].iloc[i]*(1.2e6)
+    subset_data1['Radius'] = subset_data1['New Deaths per Million'] * (1.2e6)
 
-    
 ###########################
 grouped1 = subset_data1.groupby(['Country'])
 #st.write(grouped.iloc[0])
@@ -165,13 +159,10 @@ for name, name_df in list11:
     #print(name)
     counting1.append(name)
 
-
 dict_choice1 = {key: dic1[key] for key in dic1.keys() & set(dic_1.keys())}
-
 
 xmin1 = st.sidebar.selectbox('Choose a start date:',date,key='box1.1')
 xmin1_dt = pd.to_datetime(xmin1)
-
 
 #speed = 1/(st.slider('Speed of evolution',1,20))
                   
@@ -219,10 +210,12 @@ if st.button('Show Evolving Map',key='1.3'):
 fig1, ax1 = plt.subplots(figsize=(14,10))
 
 for i in dict_choice1.values():
-    ax1.plot(pd.to_datetime(i['Date'], format = '%Y-%m-%d'),i['New Deaths per Million'],label=i['Country'].to_list()[0])
+    ax1.plot(pd.to_datetime(i['Date'], format = '%Y-%m-%d'),i['New Deaths per Million'],
+             label=i['Country'].to_list()[0],
+             marker=None,ls='-')
 #plt.xlabel('Date',fontsize=16)
 ax1.set_ylabel('Daily Deaths per Million',fontsize=22)
-ax1.legend(fontsize=22)
+ax1.legend(fontsize=22,frameon=False)
 for label in ax1.get_xticklabels():
     label.set_fontsize(18)
     label.set_rotation(45)
@@ -233,6 +226,8 @@ ax1.set_xlim(left=xmin1_dt)
 # else:
     # st.warning("Invalid x-axis limit (xmin1) detected; skipping plt.xlim()")
 # plt.xlim(xmin=xmin1)
+# ax1.tick_params(axis='both',which='major',direction='in',length=6)
+# ax1.tick_params(axis='both',which='minor',direction='in',length=3)
 ax1.set_ylim(ymin=0)
 st.pyplot(fig1)
 
@@ -325,7 +320,8 @@ subset_data2 = subset_data2.drop(columns='index')
 subset_data2['Radius']=''
 
 for i in range(0,len(subset_data2)):
-    subset_data2['Radius'].iloc[i]=subset_data2['Daily change in cumulative total per thousand'].iloc[i]*(3e6)
+    # subset_data2['Radius'].iloc[i]=subset_data2['Daily change in cumulative total per thousand'].iloc[i]*(3e6)
+    subset_data2['Radius'] = subset_data2['Daily change in cumulative total per thousand'] * (3e6)
 
     
 ###########################
@@ -414,7 +410,7 @@ for i in dict_choice2.values():
     ax2.plot(pd.to_datetime(i['Date'], format = '%Y-%m-%d'),i['Daily change in cumulative total per thousand'],label=i['Country'].to_list()[0])
 #plt.xlabel('Date',fontsize=16)
 ax2.set_ylabel('Daily Tests per Thousand',fontsize=20)
-ax2.legend(fontsize=20)
+ax2.legend(fontsize=20,frameon=False)
 # ax2.set_xticklabels(fontsize=16,rotation=45)
 # ax2.set_yticklabels(fontsize=16)
 for label in ax2.get_xticklabels():
@@ -424,6 +420,8 @@ for label in ax2.get_yticklabels():
     label.set_fontsize(18)
 ax2.set_ylim(ymin=0)
 ax2.set_xlim(left=xmin2_dt)
+# ax2.tick_params(axis='both',which='major',direction='in',length=6)
+# ax2.tick_params(axis='both',which='minor',direction='in',length=3)
 #plt.yticks(np.arange(0,max(DCTPT)+2,2))
 st.pyplot(fig2)
 
@@ -502,7 +500,8 @@ subset_data3 = subset_data3.drop(columns='index')
 subset_data3['Radius']=''
 
 for i in range(0,len(subset_data3)):
-    subset_data3['Radius'].iloc[i]=subset_data3['New Cases per Million'].iloc[i]*(3e4)
+    # subset_data3['Radius'].iloc[i]=subset_data3['New Cases per Million'].iloc[i]*(3e4)
+    subset_data3['Radius'] = subset_data3['New Cases per Million'] * (3e4)
 
     
 ###########################
@@ -591,7 +590,7 @@ for i in dict_choice3.values():
     ax3.plot(pd.to_datetime(i['Date'], format = '%Y-%m-%d'),i['New Cases per Million'],label=i['Country'].to_list()[0])
 #plt.xlabel('Date',fontsize=16)
 ax3.set_ylabel('Daily Cases per Million',fontsize=20)
-ax3.legend(fontsize=20)
+ax3.legend(fontsize=20,frameon=False)
 # ax3.set_xticklabels(fontsize=16,rotation=45)
 # ax3.set_yticklabels(fontsize=16)
 for label in ax3.get_xticklabels():
@@ -601,6 +600,8 @@ for label in ax3.get_yticklabels():
     label.set_fontsize(18)
 ax3.set_xlim(left=xmin3_dt)
 ax3.set_ylim(ymin=0)
+# ax3.tick_params(axis='both',which='major',direction='in',length=6)
+# ax3.tick_params(axis='both',which='minor',direction='in',length=3)
 
 st.pyplot(fig3)
 
