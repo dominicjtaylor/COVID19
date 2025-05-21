@@ -50,7 +50,7 @@ for x in names:
     dic1["{0}".format(x)]=by_entity.get_group(x)
 
 
-st.sidebar.header('Daily COVID-19-related Deaths per Million')
+# st.sidebar.header('Daily COVID-19-related Deaths per Million')
 input_country1 = st.sidebar.multiselect('Select the countries you wish to compare:',names,default=['United Kingdom'],key='box2')
 
 subset_data1 = pd.DataFrame()
@@ -324,8 +324,9 @@ for x in names2:
 #print(dic)
 
 
-st.sidebar.header('Daily COVID-19 Tests per Thousand')
-input_country2 = st.sidebar.multiselect('Select the countries you wish to compare:',names2,default=['United Kingdom'],key='box1')
+# st.sidebar.header('Daily COVID-19 Tests per Thousand')
+# input_country2 = st.sidebar.multiselect('Select the countries you wish to compare:',names2,default=['United Kingdom'],key='box1')
+input_country2 = input_country1
 
 subset_data2 = pd.DataFrame()
 if len(input_country2) > 0:
@@ -407,7 +408,8 @@ for name, name_df in list22:
 
 dict_choice2 = {key: dic2[key] for key in dic2.keys() & set(dic_2.keys())}
 
-xmin2 = st.sidebar.selectbox('Choose a start date:',date,key='box2.1')
+# xmin2 = st.sidebar.selectbox('Choose a start date:',date,key='box2.1')
+xmin2 = xmin1
 xmin2_dt = pd.to_datetime(xmin2)
 
 
@@ -525,8 +527,9 @@ for x in names3:
     dic3["{0}".format(x)]=by_entity_case.get_group(x)
 
 
-st.sidebar.header('Daily Confirmed COVID-19 Cases')
-input_country3 = st.sidebar.multiselect('Select the countries you wish to compare:',names3,default=['United Kingdom'],key='box3')
+# st.sidebar.header('Daily Confirmed COVID-19 Cases')
+# input_country3 = st.sidebar.multiselect('Select the countries you wish to compare:',names3,default=['United Kingdom'],key='box3')
+input_country3 = input_country1
 
 subset_data3 = pd.DataFrame()
 if len(input_country3) > 0:
@@ -610,7 +613,8 @@ for name, name_df in list33:
 
 dict_choice3 = {key: dic3[key] for key in dic3.keys() & set(dic_3.keys())}
 
-xmin3 = st.sidebar.selectbox('Choose a start date:',date,key='box3.1')
+# xmin3 = st.sidebar.selectbox('Choose a start date:',date,key='box3.1')
+xmin3 = xmin1
 xmin3_dt = pd.to_datetime(xmin3)
 
 
