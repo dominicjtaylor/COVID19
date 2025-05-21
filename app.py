@@ -135,24 +135,28 @@ for i in range(0,len(subset_data1)):
 st.write(subset_data1.head())
 
 ###########################
-grouped1 = subset_data1.groupby(['Country'])
-#st.write(grouped.iloc[0])
-df_grouped1 = pd.DataFrame(grouped1.size().reset_index())
-st.write('df_grouped:',df_grouped1)
+# grouped1 = subset_data1.groupby(['Country'])
+# df_grouped1 = pd.DataFrame(grouped1.size().reset_index())
+# st.write('df_grouped:',df_grouped1)
 
-namess1 = []
-for name, name_df in grouped1:
-    namess1.append(name)
+grouped1 = subset_data1.groupby('Country')
+df_grouped1 = grouped1.size().reset_index(name='Count')
 
-dic1 = {}
-for x in namess1:
-    dic1["{0}".format(x)]=grouped1.get_group(x)
+dic1 = {name: group for name, group in grouped1}
+
+# namess1 = []
+# for name, name_df in grouped1:
+#     namess1.append(name)
+
+# dic1 = {}
+# for x in namess1:
+#     dic1["{0}".format(x)]=grouped1.get_group(x)
 
 # dic1 = {}
 # for name, name_df in grouped1:
 #     country_name = name[0]
 #     dic1[country_name] = name_df
-st.write(dic1)
+# st.write(dic1)
 
 # dic1 = {key: group for key, group in grouped1}
 # st.write(type(dic1))
@@ -160,25 +164,33 @@ st.write(dic1)
 #     st.write(i,type(i))
 
 ###########################    
-frame=[]
-for i in range(0,len(df_grouped1['Country'])):
-    frame.append(dic_country[df_grouped1['Country'][i]])
+# frame=[]
+# for i in range(0,len(df_grouped1['Country'])):
+#     frame.append(dic_country[df_grouped1['Country'][i]])
 
-df_subset1 = pd.concat(frame)
-df_subset1 = df_subset1.drop(columns='ISO')
+frame = [dic_country[country] for country in df_grouped1['Country'] if country in dic_country]
+
+df_subset1 = pd.concat(frame, ignore_index=True).drop(columns='ISO')
+
+# df_subset1 = pd.concat(frame)
+# df_subset1 = df_subset1.drop(columns='ISO')
 #st.write('df_subset:',df_subset)
 
-list11 = df_subset1.groupby('Country')
-counting1 = []
-for name, name_df in list11:
-    #print(name)
-    counting1.append(name)
+lis11 = df_subset1.groupby('Country')
+counting1 = list(list11.groups.keys())
+
+#list11 = df_subset1.groupby('Country')
+#counting1 = []
+#for name, name_df in list11:
+#    #print(name)
+#    counting1.append(name)
 
 # st.write('dic1 keys:',list(dic1.keys()))
 # st.write('dic_1 keys:',list(dic_1.keys()))
-st.write(dic_1.keys())
-dict_choice1 = {key: dic1[key] for key in dic1.keys() & set(dic_1.keys())}
+# st.write(dic_1.keys())
+# dict_choice1 = {key: dic1[key] for key in dic1.keys() & set(dic_1.keys())}
 # st.write(dict_choice1)
+dict_choice1 = {key: dic1[key] for key in dic1.keys() & dic_1.keys()}
 
 xmin1 = st.sidebar.selectbox('Choose a start date:',date,key='box1.1')
 xmin1_dt = pd.to_datetime(xmin1)
