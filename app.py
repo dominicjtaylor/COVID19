@@ -245,6 +245,10 @@ for country, data in dict_choice1.items():
     df_temp = df_temp[['New Deaths per Million']].rename(columns={'New Deaths per Million': country})
     dfs.append(df_temp)
 st.write("number of dataframes to combine:",len(dfs))
+for i, df in enumerate(dfs):
+    st.write(f"Dataframe {i} preview:")
+    st.write(df.head())
+st.write("dict_choice1 keys:",dict_choice1.keys())
 combined_df = pd.concat(dfs, axis=1)
 st.line_chart(combined_df)
 # chart = alt.Chart(df).mark_line().encode(
