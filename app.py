@@ -28,6 +28,8 @@ df_deaths = df_deaths.rename(columns={'ConfirmedCases': 'Confirmed Cases'})
 
 # df_daily = pd.read_csv('https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv',error_bad_lines=False)
 df_daily = pd.read_csv('https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv',on_bad_lines='skip')
+st.write(df.header())
+st.write(df_daily.header())
 
 df_deaths = df_daily[['location', 'date', 'new_deaths_per_million']]
 df_deaths = df_deaths.rename(columns={'location':'Country','date':'Date','new_deaths_per_million':'New Deaths per Million'})
