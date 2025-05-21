@@ -152,6 +152,7 @@ dic1 = {}
 for name, name_df in grouped1:
     country_name = name[0]
     dic1[country_name] = name_df
+dic1 = dict(dic1)
 
 # dic1 = {key: group for key, group in grouped1}
 # st.write(type(dic1))
