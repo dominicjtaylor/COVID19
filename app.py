@@ -156,54 +156,94 @@ xmin1_dt = pd.to_datetime(xmin1)
 #     print('date after:',new_d)
 #     return new_d
                   
-if st.button('Show Evolving Map',key='1.3'):
-    datedate = datetime(2019,12,31)
+# if st.button('Show Evolving Map',key='1.3'):
+#     datedate = datetime(2019,12,31)
 
+#     view = pdk.ViewState(latitude=54,longitude=-2,zoom=0,)
+
+#     layer = pdk.Layer(
+#         'ScatterplotLayer',
+#         data=subset_data1[subset_data1['Date']=='2019-12-31'],
+#         get_position=['Longitude', 'Latitude'],
+#         pickable=False,
+#         opacity=0.1,
+#         stroked=True,
+#         filled=True,
+#         line_width_min_pixels=3,
+#         elevation_scale=4,
+#         get_radius='Radius',
+#         get_fill_color='[220, 0, 3]',
+#         get_line_color='[500,0,3]',
+#         tooltip="test test",
+#     )
+
+#     r = pdk.Deck(
+#             map_style='mapbox://styles/mapbox/dark-v9',
+#             initial_view_state=view,
+#             layers=[layer],
+#     )
+
+#     subheading = st.subheader("")
+
+#     map = st.pydeck_chart(r)
+    
+#     date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date]
+#     first_of_month_dates = [d for d in date_dt if d.day == 1]
+#     for d in first_of_month_dates:
+#         layer.data = subset_data1[subset_data1['Date'] == d.strftime("%Y-%m-%d")]
+#         # r.update()
+#         map.pydeck_chart(r)
+#         subheading.subheader("Daily Deaths per Million on : %s" % (d.strftime("%B %d, %Y")))
+#         time.sleep(0.15)
+
+#     # for i in date:
+#     #     # datedate += timedelta(days=1)
+#     #     datedate = next_month_first(datedate)
+#     #     layer.data = subset_data1[subset_data1['Date']==datedate]
+#     #     r.update()
+#     #     map.pydeck_chart(r)
+#     #     subheading.subheader("Daily Deaths per Million on : %s" % (datedate.strftime("%B %d, %Y")))
+#     #     time.sleep(0.1)
+
+if st.button('Show Evolving Map',key='1.3'):
     view = pdk.ViewState(latitude=54,longitude=-2,zoom=0,)
 
-    layer = pdk.Layer(
-        'ScatterplotLayer',
-        data=subset_data1[subset_data1['Date']=='2019-12-31'],
-        get_position=['Longitude', 'Latitude'],
-        pickable=False,
-        opacity=0.1,
-        stroked=True,
-        filled=True,
-        line_width_min_pixels=3,
-        elevation_scale=4,
-        get_radius='Radius',
-        get_fill_color='[220, 0, 3]',
-        get_line_color='[500,0,3]',
-        tooltip="test test",
-    )
-
-    r = pdk.Deck(
-            map_style='mapbox://styles/mapbox/dark-v9',
-            initial_view_state=view,
-            layers=[layer],
-    )
-
-    subheading = st.subheader("")
-
-    map = st.pydeck_chart(r)
-    
     date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date]
     first_of_month_dates = [d for d in date_dt if d.day == 1]
+
+    subheading = st.subheader("")
+    map_placeholder = st.empty()
+
     for d in first_of_month_dates:
-        layer.data = subset_data1[subset_data1['Date'] == d.strftime("%Y-%m-%d")]
-        # r.update()
-        map.pydeck_chart(r)
+        daily_data = subset_data1[subset_data1['Date'] == d.strftime("%Y-%m-%d")]
+
+        layer = pdk.Layer(
+            'ScatterplotLayer',
+            # data=subset_data1[subset_data1['Date']=='2019-12-31'],
+            data = daily_data,
+            get_position=['Longitude', 'Latitude'],
+            pickable=False,
+            opacity=0.1,
+            stroked=True,
+            filled=True,
+            line_width_min_pixels=3,
+            elevation_scale=4,
+            get_radius='Radius',
+            get_fill_color='[220, 0, 3]',
+            get_line_color='[500,0,3]',
+            # tooltip="test test",
+        )
+
+        r = pdk.Deck(
+                map_style='mapbox://styles/mapbox/dark-v9',
+                initial_view_state=view,
+                layers=[layer],
+        )
+
+        # map.pydeck_chart(r)
+        map_placeholder.pydeck_chart(r)
         subheading.subheader("Daily Deaths per Million on : %s" % (d.strftime("%B %d, %Y")))
         time.sleep(0.15)
-
-    # for i in date:
-    #     # datedate += timedelta(days=1)
-    #     datedate = next_month_first(datedate)
-    #     layer.data = subset_data1[subset_data1['Date']==datedate]
-    #     r.update()
-    #     map.pydeck_chart(r)
-    #     subheading.subheader("Daily Deaths per Million on : %s" % (datedate.strftime("%B %d, %Y")))
-    #     time.sleep(0.1)
 
 # print(dict_choice1)
 # df = pd.DataFrame({'Date':pd.to_datetime(list(dict_choice1.values())[0]['Date'],format = '%Y-%m-%d'),
