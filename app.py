@@ -244,6 +244,7 @@ for country, data in dict_choice1.items():
     df_temp = df_temp.set_index('Date')
     df_temp = df_temp[['New Deaths per Million']].rename(columns={'New Deaths per Million': country})
     dfs.append(df_temp)
+st.write("number of dataframes to combine:",len(dfs))
 combined_df = pd.concat(dfs, axis=1)
 st.line_chart(combined_df)
 # chart = alt.Chart(df).mark_line().encode(
