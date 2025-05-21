@@ -138,7 +138,7 @@ st.write(subset_data1.head())
 grouped1 = subset_data1.groupby(['Country'])
 #st.write(grouped.iloc[0])
 df_grouped1 = pd.DataFrame(grouped1.size().reset_index())
-#st.write('df_grouped:',df_grouped)
+st.write('df_grouped:',df_grouped1)
 
 namess1 = []
 for name, name_df in grouped1:
