@@ -58,6 +58,7 @@ input_country1 = st.sidebar.multiselect('Select the countries you wish to compar
 subset_data1 = pd.DataFrame()
 if len(input_country1) > 0:
     subset_data1 = df_deaths[df_deaths['Country'].isin(input_country1)]
+st.write(subset_data1.head())
 
 by_sub1 = subset_data1.groupby(["Country"])
 df_by_sub1 = pd.DataFrame(by_sub1.size().reset_index())
@@ -130,6 +131,8 @@ subset_data1['Radius']=''
 for i in range(0,len(subset_data1)):
     # subset_data1['Radius'].iloc[i]=subset_data1['New Deaths per Million'].iloc[i]*(1.2e6)
     subset_data1['Radius'] = subset_data1['New Deaths per Million'] * (1.2e5)
+
+st.write(subset_data1.head())
 
 ###########################
 grouped1 = subset_data1.groupby(['Country'])
