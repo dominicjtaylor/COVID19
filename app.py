@@ -28,8 +28,6 @@ df_deaths = df_deaths.rename(columns={'ConfirmedCases': 'Confirmed Cases'})
 
 # df_daily = pd.read_csv('https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv',error_bad_lines=False)
 df_daily = pd.read_csv('https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv',on_bad_lines='skip')
-st.write(df.head())
-st.write(df_daily.head())
 
 df_deaths = df_daily[['location', 'date', 'new_deaths_per_million']]
 df_deaths = df_deaths.rename(columns={'location':'Country','date':'Date','new_deaths_per_million':'New Deaths per Million'})
@@ -58,7 +56,6 @@ input_country1 = st.sidebar.multiselect('Select the countries you wish to compar
 subset_data1 = pd.DataFrame()
 if len(input_country1) > 0:
     subset_data1 = df_deaths[df_deaths['Country'].isin(input_country1)]
-st.write(subset_data1.head())
 
 by_sub1 = subset_data1.groupby(["Country"])
 df_by_sub1 = pd.DataFrame(by_sub1.size().reset_index())
@@ -116,15 +113,12 @@ for x in count:
 for n in count:
     latt = dic_1[n].loc[dic_1[n]['Country'] == n, 'Latitude'].iloc[0]
     lonn = dic_1[n].loc[dic_1[n]['Country'] == n, 'Longitude'].iloc[0]
-#     st.write(latt)
     subset_data1.loc[subset_data1['Country']==n,'Latitude']=latt
     subset_data1.loc[subset_data1['Country']==n,'Longitude']=lonn
 subset_data1['New Deaths per Million'] = subset_data1['New Deaths per Million'].fillna(0)
 subset_data1['New Deaths per Million'] = subset_data1['New Deaths per Million'].replace(to_replace=0, method='ffill')
 subset_data1 = subset_data1.reset_index()
 subset_data1 = subset_data1.drop(columns='index')
-#st.write('subset_data3:',pd.DataFrame(subset_data3.iloc[subset_data3[subset_data3['Date']=='2019-12-31'].index[0]]).transpose())
-#st.write(subset_data3[subset_data3['Date']=='2019-12-31'])
 #grou = subset_data3[subset_data3['Date']=='2019-12-31'].groupby(['Country'])
 subset_data1['Radius']=''
 
@@ -132,64 +126,19 @@ for i in range(0,len(subset_data1)):
     # subset_data1['Radius'].iloc[i]=subset_data1['New Deaths per Million'].iloc[i]*(1.2e6)
     subset_data1['Radius'] = subset_data1['New Deaths per Million'] * (1.2e5)
 
-st.write(subset_data1.head())
-
 ###########################
-# grouped1 = subset_data1.groupby(['Country'])
-# df_grouped1 = pd.DataFrame(grouped1.size().reset_index())
-# st.write('df_grouped:',df_grouped1)
-
 grouped1 = subset_data1.groupby('Country')
 df_grouped1 = grouped1.size().reset_index(name='Count')
 
 dic1 = {name: group for name, group in grouped1}
 
-# namess1 = []
-# for name, name_df in grouped1:
-#     namess1.append(name)
-
-# dic1 = {}
-# for x in namess1:
-#     dic1["{0}".format(x)]=grouped1.get_group(x)
-
-# dic1 = {}
-# for name, name_df in grouped1:
-#     country_name = name[0]
-#     dic1[country_name] = name_df
-# st.write(dic1)
-
-# dic1 = {key: group for key, group in grouped1}
-# st.write(type(dic1))
-# for i in dic1:
-#     st.write(i,type(i))
-
-###########################    
-# frame=[]
-# for i in range(0,len(df_grouped1['Country'])):
-#     frame.append(dic_country[df_grouped1['Country'][i]])
-
 frame = [dic_country[country] for country in df_grouped1['Country'] if country in dic_country]
 
 df_subset1 = pd.concat(frame, ignore_index=True).drop(columns='ISO')
 
-# df_subset1 = pd.concat(frame)
-# df_subset1 = df_subset1.drop(columns='ISO')
-#st.write('df_subset:',df_subset)
-
 list11 = df_subset1.groupby('Country')
 counting1 = list(list11.groups.keys())
 
-#list11 = df_subset1.groupby('Country')
-#counting1 = []
-#for name, name_df in list11:
-#    #print(name)
-#    counting1.append(name)
-
-# st.write('dic1 keys:',list(dic1.keys()))
-# st.write('dic_1 keys:',list(dic_1.keys()))
-# st.write(dic_1.keys())
-# dict_choice1 = {key: dic1[key] for key in dic1.keys() & set(dic_1.keys())}
-# st.write(dict_choice1)
 dict_choice1 = {key: dic1[key] for key in dic1.keys() & dic_1.keys()}
 
 xmin1 = st.sidebar.selectbox('Choose a start date:',date,key='box1.1')
@@ -274,11 +223,6 @@ for country, data in dict_choice1.items():
     df_temp = df_temp.set_index('Date')
     df_temp = df_temp[['New Deaths per Million']].rename(columns={'New Deaths per Million': country})
     dfs.append(df_temp)
-st.write("number of dataframes to combine:",len(dfs))
-for i, df in enumerate(dfs):
-    st.write(f"Dataframe {i} preview:")
-    st.write(df.head())
-st.write("dict_choice1 keys:",dict_choice1.keys())
 combined_df = pd.concat(dfs, axis=1)
 st.line_chart(combined_df)
 # chart = alt.Chart(df).mark_line().encode(
@@ -410,43 +354,56 @@ for i in range(0,len(subset_data2)):
 
     
 ###########################
-grouped2 = subset_data2.groupby(['Country'])
-#st.write(grouped.iloc[0])
-df_grouped2 = pd.DataFrame(grouped2.size().reset_index())
-#st.write('df_grouped:',df_grouped)
+#grouped2 = subset_data2.groupby(['Country'])
+##st.write(grouped.iloc[0])
+#df_grouped2 = pd.DataFrame(grouped2.size().reset_index())
+##st.write('df_grouped:',df_grouped)
 
-namess2 = []
-for name, name_df in grouped2:
-    #print(name)
-    namess2.append(name)
-#st.write(namesss)
+#namess2 = []
+#for name, name_df in grouped2:
+#    #print(name)
+#    namess2.append(name)
+##st.write(namesss)
 
-dic2 = {}
-for x in namess2:
-    dic2["{0}".format(x)]=grouped2.get_group(x)
+#dic2 = {}
+#for x in namess2:
+#    dic2["{0}".format(x)]=grouped2.get_group(x)
 
-###########################    
-frame2=[]
-for i in range(0,len(df_grouped2['Country'])):
-    frame2.append(dic_country[df_grouped2['Country'][i]])
+############################    
+#frame2=[]
+#for i in range(0,len(df_grouped2['Country'])):
+#    frame2.append(dic_country[df_grouped2['Country'][i]])
 
-df_subset2 = pd.concat(frame)
-df_subset2 = df_subset2.drop(columns='ISO')
-#st.write('df_subset:',df_subset)
+#df_subset2 = pd.concat(frame)
+#df_subset2 = df_subset2.drop(columns='ISO')
+##st.write('df_subset:',df_subset)
+
+#list22 = df_subset2.groupby('Country')
+#counting2 = []
+#for name, name_df in list22:
+#    #print(name)
+#    counting2.append(name)
+
+
+#dict_choice2 = {key: dic2[key] for key in dic2.keys() & set(dic_2.keys())}
+
+grouped2 = subset_data2.groupby('Country')
+df_grouped2 = grouped2.size().reset_index(name='Count')
+
+dic2 = {name: group for name, group in grouped2}
+
+frame = [dic_country[country] for country in df_grouped2['Country'] if country in dic_country]
+
+df_subset2 = pd.concat(frame, ignore_index=True).drop(columns='ISO')
 
 list22 = df_subset2.groupby('Country')
-counting2 = []
-for name, name_df in list22:
-    #print(name)
-    counting2.append(name)
+counting2 = list(list22.groups.keys())
 
-
-dict_choice2 = {key: dic2[key] for key in dic2.keys() & set(dic_2.keys())}
+dict_choice2 = {key: dic2[key] for key in dic2.keys() & dic_2.keys()}
 
 # xmin2 = st.sidebar.selectbox('Choose a start date:',date,key='box2.1')
 xmin2 = xmin1
 xmin2_dt = pd.to_datetime(xmin2)
-
 
 #speed = 1/(st.slider('Speed of evolution',1,20))
 
@@ -615,38 +572,46 @@ for i in range(0,len(subset_data3)):
 
     
 ###########################
-grouped3 = subset_data3.groupby(['Country'])
-#st.write(grouped.iloc[0])
-df_grouped3 = pd.DataFrame(grouped3.size().reset_index())
-#st.write('df_grouped:',df_grouped)
+#grouped3 = subset_data3.groupby(['Country'])
+#df_grouped3 = pd.DataFrame(grouped3.size().reset_index())
 
-namess3 = []
-for name, name_df in grouped3:
-    #print(name)
-    namess3.append(name)
-#st.write(namesss)
+#namess3 = []
+#for name, name_df in grouped3:
+#    namess3.append(name)
 
-dic3 = {}
-for x in namess3:
-    dic3["{0}".format(x)]=grouped3.get_group(x)
+#dic3 = {}
+#for x in namess3:
+#    dic3["{0}".format(x)]=grouped3.get_group(x)
 
-###########################    
-frame=[]
-for i in range(0,len(df_grouped3['Country'])):
-    frame.append(dic_country[df_grouped3['Country'][i]])
+#frame=[]
+#for i in range(0,len(df_grouped3['Country'])):
+#    frame.append(dic_country[df_grouped3['Country'][i]])
 
-df_subset3 = pd.concat(frame)
-df_subset3 = df_subset3.drop(columns='ISO')
-#st.write('df_subset:',df_subset)
+#df_subset3 = pd.concat(frame)
+#df_subset3 = df_subset3.drop(columns='ISO')
+##st.write('df_subset:',df_subset)
+
+#list33 = df_subset3.groupby('Country')
+#counting3 = []
+#for name, name_df in list33:
+#    #print(name)
+#    counting3.append(name)
+
+#dict_choice3 = {key: dic3[key] for key in dic3.keys() & set(dic_3.keys())}
+
+grouped3 = subset_data3.groupby('Country')
+df_grouped3 = grouped3.size().reset_index(name='Count')
+
+dic3 = {name: group for name, group in grouped3}
+
+frame = [dic_country[country] for country in df_grouped3['Country'] if country in dic_country]
+
+df_subset3 = pd.concat(frame, ignore_index=True).drop(columns='ISO')
 
 list33 = df_subset3.groupby('Country')
-counting3 = []
-for name, name_df in list33:
-    #print(name)
-    counting3.append(name)
+counting3 = list(list33.groups.keys())
 
-
-dict_choice3 = {key: dic3[key] for key in dic3.keys() & set(dic_3.keys())}
+dict_choice3 = {key: dic3[key] for key in dic3.keys() & dic_3.keys()}
 
 # xmin3 = st.sidebar.selectbox('Choose a start date:',date,key='box3.1')
 xmin3 = xmin1
