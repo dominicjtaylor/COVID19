@@ -191,7 +191,7 @@ if st.button('Show Evolving Map',key='1.3'):
     first_of_month_dates = [d for d in date_dt if d.day == 1]
     for d in first_of_month_dates:
         layer.data = subset_data1[subset_data1['Date'] == d.strftime("%Y-%m-%d")]
-        r.update()
+        # r.update()
         map.pydeck_chart(r)
         subheading.subheader("Daily Deaths per Million on : %s" % (d.strftime("%B %d, %Y")))
         time.sleep(0.15)
@@ -451,7 +451,7 @@ if st.button('Show Evolving Map',key='2.3'):
     first_of_month_dates = [d for d in date_dt if d.day == 1]
     for d in first_of_month_dates:
         layer.data = subset_data1[subset_data2['Date'] == d.strftime("%Y-%m-%d")]
-        r.update()
+        # r.update()
         map.pydeck_chart(r)
         subheading.subheader("Daily number of tests per thousand : %s" % (d.strftime("%B %d, %Y")))
         time.sleep(0.15)
@@ -664,7 +664,7 @@ if st.button('Show Evolving Map',key='3.3'):
     first_of_month_dates = [d for d in date_dt if d.day == 1]
     for d in first_of_month_dates:
         layer.data = subset_data1[subset_data3['Date'] == d.strftime("%Y-%m-%d")]
-        r.update()
+        # r.update()
         map.pydeck_chart(r)
         subheading.subheader("Daily Cases per Million on : %s" % (d.strftime("%B %d, %Y")))
         time.sleep(0.15)
