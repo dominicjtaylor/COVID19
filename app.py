@@ -102,16 +102,16 @@ for i in range(0,len(df_by_sub1['Country'])):
 df_sel = pd.concat(frames)
 df_sel1 = df_sel.drop(columns='ISO')
 
-list = df_sel.groupby('Country')
+list_sel = df_sel.groupby('Country')
 count = []
-for name, name_df in list:
+for name, name_df in list_sel:
     #print(name)
     count.append(name)
 #print(count)
 
 dic_1 = {}
 for x in count:
-    dic_1["{0}".format(x)]=list.get_group(x)
+    dic_1["{0}".format(x)]=list_sel.get_group(x)
 
 for n in count:
     latt = dic_1[n].loc[dic_1[n]['Country'] == n, 'Latitude'].iloc[0]
@@ -177,7 +177,6 @@ df_subset1 = pd.concat(frame, ignore_index=True).drop(columns='ISO')
 #st.write('df_subset:',df_subset)
 
 list11 = df_subset1.groupby('Country')
-st.write(list11,type(list11))
 counting1 = list(list11.groups.keys())
 
 #list11 = df_subset1.groupby('Country')
