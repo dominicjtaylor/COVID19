@@ -140,18 +140,18 @@ grouped1 = subset_data1.groupby(['Country'])
 df_grouped1 = pd.DataFrame(grouped1.size().reset_index())
 st.write('df_grouped:',df_grouped1)
 
-# namess1 = []
-# for name, name_df in grouped1:
-#     namess1.append(name)
-
-# dic1 = {}
-# for x in namess1:
-#     dic1["{0}".format(x)]=grouped1.get_group(x)
+namess1 = []
+for name, name_df in grouped1:
+    namess1.append(name)
 
 dic1 = {}
-for name, name_df in grouped1:
-    country_name = name[0]
-    dic1[country_name] = name_df
+for x in namess1:
+    dic1["{0}".format(x)]=grouped1.get_group(x)
+
+# dic1 = {}
+# for name, name_df in grouped1:
+#     country_name = name[0]
+#     dic1[country_name] = name_df
 st.write(dic1)
 
 # dic1 = {key: group for key, group in grouped1}
