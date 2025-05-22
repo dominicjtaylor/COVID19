@@ -117,14 +117,15 @@ dic_1 = {}
 for x in count:
     dic_1["{0}".format(x)]=list_sel.get_group(x)
 
-rows = []
+lat_map = {}
+lon_map = {}
 for n in count:
     df = dic_1[n]
     row = df[df['Country'] == n].iloc[0]
-    rows.append({'Country': n, 'Latitude': row['Latitude'], 'Longitude': row['Longitude']})
-lookup_df = pd.DataFrame(rows)
-subset_data1 = subset_data1.drop(columns=['Latitude', 'Longitude'], errors='ignore')  # remove old if needed
-subset_data1 = subset_data1.merge(lookup_df, on='Country', how='left')
+    lat_map[n] = row['Latitude']
+    lon_map[n] = row['Longitude']
+subset_data1['Latitude'] = subset_data1['Country'].map(lat_map)
+subset_data1['Longitude'] = subset_data1['Country'].map(lon_map)
 subset_data1['New Deaths per Million'] = subset_data1['New Deaths per Million'].fillna(0)
 subset_data1['New Deaths per Million'] = subset_data1['New Deaths per Million'].replace(to_replace=0, method='ffill')
 subset_data1 = subset_data1.reset_index()
