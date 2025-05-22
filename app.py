@@ -246,6 +246,7 @@ if st.button('Show Evolving Map',key='1.3'):
 
     for d in first_of_month_dates:
         daily_data = subset_data1[subset_data1['Date'] == d.strftime("%Y-%m-%d")]
+        st.write(daily_data['Latitude'])
 
         layer = pdk.Layer(
             'ScatterplotLayer',
