@@ -76,10 +76,8 @@ df_locus['Latitude'] = pd.to_numeric(df_locus['Latitude'], downcast="float", err
 df_locus['Longitude'] = pd.to_numeric(df_locus['Longitude'], downcast="float", errors='coerce')
 
 max_date = pd.to_datetime(df_deaths['Date']).max()
-st.write(max_date)
 dates = pd.date_range(start="2020-01-01", end=max_date, freq='MS').to_list()
 date = [d.strftime("%Y-%m-%d") for d in dates]
-st.write(date)
 
 # dates = pd.date_range(start="2019-12-31",end=datetime.today()-timedelta(days=1)).to_list()
 # date = []
@@ -239,7 +237,7 @@ st.line_chart(combined_df,x_label='Date',y_label='N')
 if st.button('Show Evolving Map',key='1.3'):
     view = pdk.ViewState(latitude=54,longitude=-2,zoom=0,)
 
-    date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date if pd.to_datetime(d) > pd.to_datetime(xmin1)]
+    date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date if pd.to_datetime(d) > pd.to_datetime(xmin1) and pd.to_datetime(d) < max_date]
     first_of_month_dates = [d for d in date_dt if d.day == 1]
 
     subheading = st.subheader("")
@@ -510,7 +508,7 @@ if st.button('Show Evolving Map',key='2.3'):
     #     time.sleep(0.1)
 
     # date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date]
-    date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date if pd.to_datetime(d) > pd.to_datetime(xmin1)]
+    date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date if pd.to_datetime(d) > pd.to_datetime(xmin1) and pd.to_datetime(d) < max_date]
     first_of_month_dates = [d for d in date_dt if d.day == 1]
     for d in first_of_month_dates:
         layer.data = subset_data1[subset_data2['Date'] == d.strftime("%Y-%m-%d")]
@@ -726,7 +724,7 @@ if st.button('Show Evolving Map',key='3.3'):
     #     time.sleep(0.1)
 
     # date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date]
-    date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date if pd.to_datetime(d) > pd.to_datetime(xmin1)]
+    date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date if pd.to_datetime(d) > pd.to_datetime(xmin1) and pd.to_datetime(d) < max_date]
     first_of_month_dates = [d for d in date_dt if d.day == 1]
     for d in first_of_month_dates:
         layer.data = subset_data1[subset_data3['Date'] == d.strftime("%Y-%m-%d")]
