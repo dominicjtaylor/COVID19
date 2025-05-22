@@ -137,7 +137,7 @@ dic1 = {name: group for name, group in grouped1}
 
 frame = [dic_country[country] for country in df_grouped1['Country'] if country in dic_country]
 
-df_subset1 = pd.concat(frame, ignore_index=True).drop(columns='ISO')
+df_subset1 = pd.concat(frame, ignore_index=True)#.drop(columns='ISO')
 
 list11 = df_subset1.groupby('Country')
 counting1 = list(list11.groups.keys())
@@ -437,7 +437,7 @@ dic2 = {name: group for name, group in grouped2}
 
 frame = [dic_country[country] for country in df_grouped2['Country'] if country in dic_country]
 
-df_subset2 = pd.concat(frame, ignore_index=True).drop(columns='ISO')
+df_subset2 = pd.concat(frame, ignore_index=True)#.drop(columns='ISO')
 
 list22 = df_subset2.groupby('Country')
 counting2 = list(list22.groups.keys())
@@ -650,7 +650,7 @@ dic3 = {name: group for name, group in grouped3}
 
 frame = [dic_country[country] for country in df_grouped3['Country'] if country in dic_country]
 
-df_subset3 = pd.concat(frame, ignore_index=True).drop(columns='ISO')
+df_subset3 = pd.concat(frame, ignore_index=True)#.drop(columns='ISO')
 
 list33 = df_subset3.groupby('Country')
 counting3 = list(list33.groups.keys())
