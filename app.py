@@ -111,8 +111,8 @@ for x in count:
     dic_1["{0}".format(x)]=list_sel.get_group(x)
 
 for n in count:
-    print(n)
-    print(dic_1['Country'])
+    st.write(n)
+    st.write(dic_1[n]['Country'])
     latt = float(dic_1[n].loc[dic_1[n]['Country'] == n, 'Latitude'].iloc[0])
     lonn = float(dic_1[n].loc[dic_1[n]['Country'] == n, 'Longitude'].iloc[0])
     st.write(latt,type(latt),lonn,type(lonn))
