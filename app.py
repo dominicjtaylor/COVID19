@@ -518,7 +518,7 @@ st.line_chart(combined_df,x_label='Date',y_label='N')
 #         subheading.subheader("Daily number of tests per thousand : %s" % (d.strftime("%B %d, %Y")))
 #         time.sleep(0.15)
 
-if st.button('Show Evolving Map',key='1.3'):
+if st.button('Show Evolving Map',key='2.3'):
     view = pdk.ViewState(latitude=54,longitude=-2,zoom=0,)
 
     date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date if pd.to_datetime(d) > pd.to_datetime(xmin1) and pd.to_datetime(d) < max_date]
@@ -724,7 +724,7 @@ for country, data in dict_choice3.items():
 combined_df = pd.concat(dfs, axis=1)
 st.line_chart(combined_df,x_label='Date',y_label='N')
 
-if st.button('Show Evolving Map',key='1.3'):
+if st.button('Show Evolving Map',key='3.3'):
     view = pdk.ViewState(latitude=54,longitude=-2,zoom=0,)
 
     date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date if pd.to_datetime(d) > pd.to_datetime(xmin1) and pd.to_datetime(d) < max_date]
