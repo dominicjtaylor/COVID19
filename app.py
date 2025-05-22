@@ -250,7 +250,7 @@ if st.button('Show Evolving Map',key='1.3'):
             'ScatterplotLayer',
             # data=subset_data1[subset_data1['Date']=='2019-12-31'],
             data = daily_data,
-            get_position=['Longitude', 'Latitude'],
+            get_position='[Longitude, Latitude]',
             pickable=False,
             opacity=0.1,
             stroked=True,
@@ -259,8 +259,8 @@ if st.button('Show Evolving Map',key='1.3'):
             elevation_scale=4,
             get_radius='Radius',
             get_fill_color='[220, 0, 3]',
-            get_line_color='[500,0,3]',
-            # tooltip="test test",
+            get_line_color='[255,0,3]',
+            tooltip="test test",
         )
 
         r = pdk.Deck(
