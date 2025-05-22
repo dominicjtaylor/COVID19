@@ -75,7 +75,7 @@ df_locus['Longitude'] = df_locus['Longitude'].str.strip()
 df_locus['Latitude'] = pd.to_numeric(df_locus['Latitude'], downcast="float", errors='coerce')
 df_locus['Longitude'] = pd.to_numeric(df_locus['Longitude'], downcast="float", errors='coerce')
 
-max_date = pd.to_datetime(df_daily['Date']).max()
+max_date = pd.to_datetime(df_deaths['Date']).max()
 st.write(max_date)
 dates = pd.date_range(start="2020-01-01", end=max_date, freq='MS').to_list()
 date = [d.strftime("%Y-%m-%d") for d in dates]
