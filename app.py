@@ -234,6 +234,7 @@ for country, data in dict_choice1.items():
 combined_df = pd.concat(dfs, axis=1)
 st.line_chart(combined_df,x_label='Date',y_label='N')
 
+st.write(list(subset_data1.keys()))
 if st.button('Show Evolving Map',key='1.3'):
     view = pdk.ViewState(latitude=54,longitude=-2,zoom=0,)
 
@@ -250,8 +251,7 @@ if st.button('Show Evolving Map',key='1.3'):
             'ScatterplotLayer',
             # data=subset_data1[subset_data1['Date']=='2019-12-31'],
             data = daily_data,
-            # get_position='[Longitude, Latitude]',
-            get_position = lambda d: [d['Longitude'], d['Latitude']],
+            get_position=['Longitude, Latitude'],
             pickable=False,
             opacity=0.1,
             stroked=True,
