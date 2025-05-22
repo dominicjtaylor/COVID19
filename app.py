@@ -82,6 +82,7 @@ df_locus['Longitude'] = pd.to_numeric(df_locus['Longitude'], downcast="float", e
 #     date.append(string)
 
 date = df_deaths['Date'].to_list()
+st.write(date)
 
 list_country = df_locus.groupby('Country')
 countries = []
@@ -210,6 +211,27 @@ xmin1_dt = pd.to_datetime(xmin1)
 #     #     subheading.subheader("Daily Deaths per Million on : %s" % (datedate.strftime("%B %d, %Y")))
 #     #     time.sleep(0.1)
 
+# print(dict_choice1)
+# df = pd.DataFrame({'Date':pd.to_datetime(list(dict_choice1.values())[0]['Date'],format = '%Y-%m-%d'),
+#                    'New Deaths per Million':list(dict_choice1.values())[0]['New Deaths per Million']})
+# st.line_chart(df)
+# for i in dict_choice1.values():
+#     dates = list(pd.to_datetime(i['Date'], format = '%Y-%m-%d'))
+#     n = list(i['New Deaths per Million'])
+# print(dates)
+# print(n)
+# df = pd.DataFrame({'dates':dates,'n':n})
+# st.line_chart(df)
+dfs = []
+for country, data in dict_choice1.items():
+    df_temp = data.copy()
+    df_temp['Date'] = pd.to_datetime(df_temp['Date'], format='%Y-%m-%d')
+    df_temp = df_temp.set_index('Date')
+    df_temp = df_temp[['New Deaths per Million']].rename(columns={'New Deaths per Million': country})
+    dfs.append(df_temp)
+combined_df = pd.concat(dfs, axis=1)
+st.line_chart(combined_df)
+
 if st.button('Show Evolving Map',key='1.3'):
     view = pdk.ViewState(latitude=54,longitude=-2,zoom=0,)
 
@@ -250,26 +272,6 @@ if st.button('Show Evolving Map',key='1.3'):
         subheading.subheader("Daily Deaths per Million on : %s" % (d.strftime("%B %d, %Y")))
         time.sleep(0.15)
 
-# print(dict_choice1)
-# df = pd.DataFrame({'Date':pd.to_datetime(list(dict_choice1.values())[0]['Date'],format = '%Y-%m-%d'),
-#                    'New Deaths per Million':list(dict_choice1.values())[0]['New Deaths per Million']})
-# st.line_chart(df)
-# for i in dict_choice1.values():
-#     dates = list(pd.to_datetime(i['Date'], format = '%Y-%m-%d'))
-#     n = list(i['New Deaths per Million'])
-# print(dates)
-# print(n)
-# df = pd.DataFrame({'dates':dates,'n':n})
-# st.line_chart(df)
-dfs = []
-for country, data in dict_choice1.items():
-    df_temp = data.copy()
-    df_temp['Date'] = pd.to_datetime(df_temp['Date'], format='%Y-%m-%d')
-    df_temp = df_temp.set_index('Date')
-    df_temp = df_temp[['New Deaths per Million']].rename(columns={'New Deaths per Million': country})
-    dfs.append(df_temp)
-combined_df = pd.concat(dfs, axis=1)
-st.line_chart(combined_df)
 # chart = alt.Chart(df).mark_line().encode(
 #         x=alt.X('date:T',axis=alt.Axis(format='%b %Y')),
 #         y=alt.Y('value:Q'))
@@ -452,6 +454,16 @@ xmin2_dt = pd.to_datetime(xmin2)
 
 #speed = 1/(st.slider('Speed of evolution',1,20))
 
+dfs = []
+for country, data in dict_choice2.items():
+    df_temp = data.copy()
+    df_temp['Date'] = pd.to_datetime(df_temp['Date'], format='%Y-%m-%d')
+    df_temp = df_temp.set_index('Date')
+    df_temp = df_temp[['Daily change in cumulative total per thousand']].rename(columns={'Daily change in cumulative total per thousand': country})
+    dfs.append(df_temp)
+combined_df = pd.concat(dfs, axis=1)
+st.line_chart(combined_df)
+
 if st.button('Show Evolving Map',key='2.3'):
     datedate = datetime(2019,12,31)
 
@@ -502,15 +514,6 @@ if st.button('Show Evolving Map',key='2.3'):
         subheading.subheader("Daily number of tests per thousand : %s" % (d.strftime("%B %d, %Y")))
         time.sleep(0.15)
 
-dfs = []
-for country, data in dict_choice2.items():
-    df_temp = data.copy()
-    df_temp['Date'] = pd.to_datetime(df_temp['Date'], format='%Y-%m-%d')
-    df_temp = df_temp.set_index('Date')
-    df_temp = df_temp[['Daily change in cumulative total per thousand']].rename(columns={'Daily change in cumulative total per thousand': country})
-    dfs.append(df_temp)
-combined_df = pd.concat(dfs, axis=1)
-st.line_chart(combined_df)
 
 #fig2, ax2 = plt.subplots(figsize=(12,8))
 
@@ -666,6 +669,16 @@ xmin3_dt = pd.to_datetime(xmin3)
 
 #speed = 1/(st.slider('Speed of evolution',1,20))
                   
+dfs = []
+for country, data in dict_choice3.items():
+    df_temp = data.copy()
+    df_temp['Date'] = pd.to_datetime(df_temp['Date'], format='%Y-%m-%d')
+    df_temp = df_temp.set_index('Date')
+    df_temp = df_temp[['New Cases per Million']].rename(columns={'New Cases per Million': country})
+    dfs.append(df_temp)
+combined_df = pd.concat(dfs, axis=1)
+st.line_chart(combined_df)
+
 if st.button('Show Evolving Map',key='3.3'):
     datedate = datetime(2019,12,31)
 
@@ -716,15 +729,6 @@ if st.button('Show Evolving Map',key='3.3'):
         subheading.subheader("Daily Cases per Million on : %s" % (d.strftime("%B %d, %Y")))
         time.sleep(0.15)
 
-dfs = []
-for country, data in dict_choice3.items():
-    df_temp = data.copy()
-    df_temp['Date'] = pd.to_datetime(df_temp['Date'], format='%Y-%m-%d')
-    df_temp = df_temp.set_index('Date')
-    df_temp = df_temp[['New Cases per Million']].rename(columns={'New Cases per Million': country})
-    dfs.append(df_temp)
-combined_df = pd.concat(dfs, axis=1)
-st.line_chart(combined_df)
 
 #fig3, ax3 = plt.subplots(figsize=(12,8))
 
