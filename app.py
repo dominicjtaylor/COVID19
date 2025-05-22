@@ -239,7 +239,7 @@ st.line_chart(combined_df,x_label='Date',y_label='N')
 if st.button('Show Evolving Map',key='1.3'):
     view = pdk.ViewState(latitude=54,longitude=-2,zoom=0,)
 
-    date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date if datetime.strptime(d) > datetime.strptime(xmin1)]
+    date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date if pd.to_datetime(d) > pd.to_datetime(xmin1)]
     first_of_month_dates = [d for d in date_dt if d.day == 1]
 
     subheading = st.subheader("")
@@ -510,7 +510,7 @@ if st.button('Show Evolving Map',key='2.3'):
     #     time.sleep(0.1)
 
     # date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date]
-    date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date if datetime.strptime(d) > datetime.strptime(xmin1)]
+    date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date if pd.to_datetime(d) > pd.to_datetime(xmin1)]
     first_of_month_dates = [d for d in date_dt if d.day == 1]
     for d in first_of_month_dates:
         layer.data = subset_data1[subset_data2['Date'] == d.strftime("%Y-%m-%d")]
@@ -726,7 +726,7 @@ if st.button('Show Evolving Map',key='3.3'):
     #     time.sleep(0.1)
 
     # date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date]
-    date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date if datetime.strptime(d) > datetime.strptime(xmin1)]
+    date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date if pd.to_datetime(d) > pd.to_datetime(xmin1)]
     first_of_month_dates = [d for d in date_dt if d.day == 1]
     for d in first_of_month_dates:
         layer.data = subset_data1[subset_data3['Date'] == d.strftime("%Y-%m-%d")]
