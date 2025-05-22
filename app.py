@@ -113,6 +113,7 @@ for x in count:
 for n in count:
     latt = float(dic_1[n].loc[dic_1[n]['Country'] == n, 'Latitude'].iloc[0])
     lonn = float(dic_1[n].loc[dic_1[n]['Country'] == n, 'Longitude'].iloc[0])
+    st.write(latt,type(latt),lonn,type(lonn))
     subset_data1.loc[subset_data1['Country']==n,'Latitude']=latt
     subset_data1.loc[subset_data1['Country']==n,'Longitude']=lonn
 subset_data1['New Deaths per Million'] = subset_data1['New Deaths per Million'].fillna(0)
