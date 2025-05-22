@@ -117,17 +117,30 @@ dic_1 = {}
 for x in count:
     dic_1["{0}".format(x)]=list_sel.get_group(x)
 
+rows = []
 for n in count:
-    latt = float(dic_1[n].loc[dic_1[n]['Country'] == n, 'Latitude'].iloc[0])
-    lonn = float(dic_1[n].loc[dic_1[n]['Country'] == n, 'Longitude'].iloc[0])
-    subset_data1.loc[subset_data1['Country']==n,'Latitude']=latt
-    subset_data1.loc[subset_data1['Country']==n,'Longitude']=lonn
+    df = dic_1[n]
+    row = df[df['Country'] == n].iloc[0]
+    rows.append({'Country': n, 'Latitude': row['Latitude'], 'Longitude': row['Longitude']})
+lookup_df = pd.DataFrame(rows)
+subset_data1 = subset_data1.drop(columns=['Latitude', 'Longitude'], errors='ignore')  # remove old if needed
+subset_data1 = subset_data1.merge(lookup_df, on='Country', how='left')
 subset_data1['New Deaths per Million'] = subset_data1['New Deaths per Million'].fillna(0)
 subset_data1['New Deaths per Million'] = subset_data1['New Deaths per Million'].replace(to_replace=0, method='ffill')
 subset_data1 = subset_data1.reset_index()
 subset_data1 = subset_data1.drop(columns='index')
-#grou = subset_data3[subset_data3['Date']=='2019-12-31'].groupby(['Country'])
 subset_data1['Radius']=''
+
+# for n in count:
+#     latt = float(dic_1[n].loc[dic_1[n]['Country'] == n, 'Latitude'].iloc[0])
+#     lonn = float(dic_1[n].loc[dic_1[n]['Country'] == n, 'Longitude'].iloc[0])
+#     subset_data1.loc[subset_data1['Country']==n,'Latitude']=latt
+#     subset_data1.loc[subset_data1['Country']==n,'Longitude']=lonn
+# subset_data1['New Deaths per Million'] = subset_data1['New Deaths per Million'].fillna(0)
+# subset_data1['New Deaths per Million'] = subset_data1['New Deaths per Million'].replace(to_replace=0, method='ffill')
+# subset_data1 = subset_data1.reset_index()
+# subset_data1 = subset_data1.drop(columns='index')
+# subset_data1['Radius']=''
 
 for i in range(0,len(subset_data1)):
     # subset_data1['Radius'].iloc[i]=subset_data1['New Deaths per Million'].iloc[i]*(1.2e6)
