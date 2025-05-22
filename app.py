@@ -20,11 +20,11 @@ st.info('Click the Sidebar to change preferences.')#Once the Map is in view, you
 
 st.header('Daily COVID-19-related Deaths per Million')
 
-# df = pd.read_csv('https://raw.githubusercontent.com/tomwhite/covid-19-uk-data/master/data/covid-19-totals-uk.csv',error_bad_lines=False)
-df = pd.read_csv('https://raw.githubusercontent.com/tomwhite/covid-19-uk-data/master/data/covid-19-totals-uk.csv',on_bad_lines='skip')
+# # df = pd.read_csv('https://raw.githubusercontent.com/tomwhite/covid-19-uk-data/master/data/covid-19-totals-uk.csv',error_bad_lines=False)
+# df = pd.read_csv('https://raw.githubusercontent.com/tomwhite/covid-19-uk-data/master/data/covid-19-totals-uk.csv',on_bad_lines='skip')
 
-df_deaths = df[['Date', 'Tests', 'ConfirmedCases', 'Deaths']]
-df_deaths = df_deaths.rename(columns={'ConfirmedCases': 'Confirmed Cases'})
+# df_deaths = df[['Date', 'Tests', 'ConfirmedCases', 'Deaths']]
+# df_deaths = df_deaths.rename(columns={'ConfirmedCases': 'Confirmed Cases'})
 
 # df_daily = pd.read_csv('https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv',error_bad_lines=False)
 df_daily = pd.read_csv('https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv',on_bad_lines='skip')
@@ -65,9 +65,9 @@ df_by_sub1 = df_by_sub1.drop(df_by_sub1.columns[-1],axis=1)
 df_locus = pd.read_csv('https://gist.githubusercontent.com/tadast/8827699/raw/'
                        '3cd639fa34eec5067080a61c69e3ae25e3076abb/countries_codes_and_coordinates.csv')
 
-df_locus = df_locus.rename(columns={'Alpha-3 code':'ISO','Latitude (average)':'Latitude','Longitude (average)':'Longitude'})
-df_locus.drop(columns=["Alpha-2 code","Numeric code"], inplace=True)
-df_locus['ISO'] = df_locus['ISO'].str.replace(r"[\"]", '')
+df_locus = df_locus.rename(columns={'Latitude (average)':'Latitude','Longitude (average)':'Longitude'})
+df_locus.drop(columns=["Alpha-3 code","Alpha-2 code","Numeric code"], inplace=True)
+# df_locus['ISO'] = df_locus['ISO'].str.replace(r"[\"]", '')
 df_locus['Latitude'] = df_locus['Latitude'].str.replace(r"[\"]", '')
 df_locus['Longitude'] = df_locus['Longitude'].str.replace(r"[\"]", '')
 df_locus['Latitude'] = df_locus['Latitude'].str.strip()
@@ -75,11 +75,11 @@ df_locus['Longitude'] = df_locus['Longitude'].str.strip()
 df_locus['Latitude'] = pd.to_numeric(df_locus['Latitude'], downcast="float", errors='coerce')
 df_locus['Longitude'] = pd.to_numeric(df_locus['Longitude'], downcast="float", errors='coerce')
 
-dates = pd.date_range(start="2019-12-31",end=datetime.today()-timedelta(days=1)).to_list()
-date = []
-for i in dates:
-    string = i.strftime("%Y-%m-%d")
-    date.append(string)
+# dates = pd.date_range(start="2019-12-31",end=datetime.today()-timedelta(days=1)).to_list()
+# date = []
+# for i in dates:
+#     string = i.strftime("%Y-%m-%d")
+#     date.append(string)
 
 list_country = df_locus.groupby('Country')
 countries = []
@@ -97,7 +97,7 @@ for i in range(0,len(df_by_sub1['Country'])):
     frames.append(dic_country[df_by_sub1['Country'][i]])
 
 df_sel = pd.concat(frames)
-df_sel1 = df_sel.drop(columns='ISO')
+# df_sel1 = df_sel.drop(columns='ISO')
 
 list_sel = df_sel.groupby('Country')
 count = []
@@ -211,7 +211,7 @@ xmin1_dt = pd.to_datetime(xmin1)
 if st.button('Show Evolving Map',key='1.3'):
     view = pdk.ViewState(latitude=54,longitude=-2,zoom=0,)
 
-    date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date]
+    date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date if datetime.strptime(d) > datetime.strptime(xmin1)]
     first_of_month_dates = [d for d in date_dt if d.day == 1]
 
     subheading = st.subheader("")
@@ -364,7 +364,7 @@ for i in range(0,len(df_by_sub2['Country'])):
     frames2.append(dic_country[df_by_sub2['Country'][i]])
 
 df_sel2 = pd.concat(frames2)
-df_sel2 = df_sel2.drop(columns='ISO')
+# df_sel2 = df_sel2.drop(columns='ISO')
 
 list2 = df_sel2.groupby('Country')
 count2 = []
@@ -490,7 +490,8 @@ if st.button('Show Evolving Map',key='2.3'):
     #     subheading.subheader("Daily number of tests per thousand : %s" % (datedate.strftime("%B %d, %Y")))
     #     time.sleep(0.1)
 
-    date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date]
+    # date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date]
+    date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date if datetime.strptime(d) > datetime.strptime(xmin1)]
     first_of_month_dates = [d for d in date_dt if d.day == 1]
     for d in first_of_month_dates:
         layer.data = subset_data1[subset_data2['Date'] == d.strftime("%Y-%m-%d")]
@@ -582,7 +583,7 @@ for i in range(0,len(df_by_sub3['Country'])):
     frames3.append(dic_country[df_by_sub3['Country'][i]])
 
 df_sel3 = pd.concat(frames3)
-df_sel3 = df_sel3.drop(columns='ISO')
+# df_sel3 = df_sel3.drop(columns='ISO')
 
 list3 = df_sel3.groupby('Country')
 count3 = []
@@ -703,7 +704,8 @@ if st.button('Show Evolving Map',key='3.3'):
     #     subheading.subheader("Daily Cases per Million on : %s" % (datedate.strftime("%B %d, %Y")))
     #     time.sleep(0.1)
 
-    date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date]
+    # date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date]
+    date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date if datetime.strptime(d) > datetime.strptime(xmin1)]
     first_of_month_dates = [d for d in date_dt if d.day == 1]
     for d in first_of_month_dates:
         layer.data = subset_data1[subset_data3['Date'] == d.strftime("%Y-%m-%d")]
