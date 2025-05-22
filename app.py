@@ -81,6 +81,8 @@ df_locus['Longitude'] = pd.to_numeric(df_locus['Longitude'], downcast="float", e
 #     string = i.strftime("%Y-%m-%d")
 #     date.append(string)
 
+date = df_deaths['Date'].to_list()
+
 list_country = df_locus.groupby('Country')
 countries = []
 for name, name_df in list_country:
