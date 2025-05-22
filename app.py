@@ -229,6 +229,7 @@ dfs = []
 for country, data in dict_choice1.items():
     df_temp = data.copy()
     df_temp['Date'] = pd.to_datetime(df_temp['Date'], format='%Y-%m-%d')
+    df_temp = df_temp[df_temp['Date'] > datetime.strptime(xmin1)]
     df_temp = df_temp.set_index('Date')
     df_temp = df_temp[['New Deaths per Million']].rename(columns={'New Deaths per Million': country})
     dfs.append(df_temp)
@@ -461,6 +462,7 @@ dfs = []
 for country, data in dict_choice2.items():
     df_temp = data.copy()
     df_temp['Date'] = pd.to_datetime(df_temp['Date'], format='%Y-%m-%d')
+    df_temp = df_temp[df_temp['Date'] > datetime.strptime(xmin1)]
     df_temp = df_temp.set_index('Date')
     df_temp = df_temp[['Daily change in cumulative total per thousand']].rename(columns={'Daily change in cumulative total per thousand': country})
     dfs.append(df_temp)
@@ -676,6 +678,7 @@ dfs = []
 for country, data in dict_choice3.items():
     df_temp = data.copy()
     df_temp['Date'] = pd.to_datetime(df_temp['Date'], format='%Y-%m-%d')
+    df_temp = df_temp[df_temp['Date'] > datetime.strptime(xmin1)]
     df_temp = df_temp.set_index('Date')
     df_temp = df_temp[['New Cases per Million']].rename(columns={'New Cases per Million': country})
     dfs.append(df_temp)
