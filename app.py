@@ -114,11 +114,8 @@ for x in count:
     dic_1["{0}".format(x)]=list_sel.get_group(x)
 
 for n in count:
-    st.write(n)
-    st.write(dic_1[n]['Country'])
     latt = float(dic_1[n].loc[dic_1[n]['Country'] == n, 'Latitude'].iloc[0])
     lonn = float(dic_1[n].loc[dic_1[n]['Country'] == n, 'Longitude'].iloc[0])
-    st.write(latt,type(latt),lonn,type(lonn))
     subset_data1.loc[subset_data1['Country']==n,'Latitude']=latt
     subset_data1.loc[subset_data1['Country']==n,'Longitude']=lonn
 subset_data1['New Deaths per Million'] = subset_data1['New Deaths per Million'].fillna(0)
