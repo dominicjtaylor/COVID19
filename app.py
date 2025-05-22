@@ -75,14 +75,14 @@ df_locus['Longitude'] = df_locus['Longitude'].str.strip()
 df_locus['Latitude'] = pd.to_numeric(df_locus['Latitude'], downcast="float", errors='coerce')
 df_locus['Longitude'] = pd.to_numeric(df_locus['Longitude'], downcast="float", errors='coerce')
 
-# dates = pd.date_range(start="2019-12-31",end=datetime.today()-timedelta(days=1)).to_list()
-# date = []
-# for i in dates:
-#     string = i.strftime("%Y-%m-%d")
-#     date.append(string)
+dates = pd.date_range(start="2019-12-31",end=datetime.today()-timedelta(days=1)).to_list()
+date = []
+for i in dates:
+    string = i.strftime("%Y-%m-%d")
+    date.append(string)
 
-date = df_deaths['Date'].to_list()
-st.write(date)
+# date = df_deaths['Date'].to_list()
+# st.write(date)
 
 list_country = df_locus.groupby('Country')
 countries = []
@@ -148,7 +148,7 @@ counting1 = list(list11.groups.keys())
 dict_choice1 = {key: dic1[key] for key in dic1.keys() & dic_1.keys()}
 
 xmin1 = st.sidebar.selectbox('Choose a start date:',date,key='box1.1')
-xmin1_dt = pd.to_datetime(xmin1)
+# xmin1_dt = pd.to_datetime(xmin1)
 
 #speed = 1/(st.slider('Speed of evolution',1,20))
 # def next_month_first(d):
@@ -230,7 +230,7 @@ for country, data in dict_choice1.items():
     df_temp = df_temp[['New Deaths per Million']].rename(columns={'New Deaths per Million': country})
     dfs.append(df_temp)
 combined_df = pd.concat(dfs, axis=1)
-st.line_chart(combined_df)
+st.line_chart(combined_df,x_label='Date',y_label='N')
 
 if st.button('Show Evolving Map',key='1.3'):
     view = pdk.ViewState(latitude=54,longitude=-2,zoom=0,)
@@ -450,7 +450,7 @@ dict_choice2 = {key: dic2[key] for key in dic2.keys() & dic_2.keys()}
 
 # xmin2 = st.sidebar.selectbox('Choose a start date:',date,key='box2.1')
 xmin2 = xmin1
-xmin2_dt = pd.to_datetime(xmin2)
+# xmin2_dt = pd.to_datetime(xmin2)
 
 #speed = 1/(st.slider('Speed of evolution',1,20))
 
@@ -462,7 +462,7 @@ for country, data in dict_choice2.items():
     df_temp = df_temp[['Daily change in cumulative total per thousand']].rename(columns={'Daily change in cumulative total per thousand': country})
     dfs.append(df_temp)
 combined_df = pd.concat(dfs, axis=1)
-st.line_chart(combined_df)
+st.line_chart(combined_df,x_label='Date',y_label='N')
 
 if st.button('Show Evolving Map',key='2.3'):
     datedate = datetime(2019,12,31)
@@ -664,7 +664,7 @@ dict_choice3 = {key: dic3[key] for key in dic3.keys() & dic_3.keys()}
 
 # xmin3 = st.sidebar.selectbox('Choose a start date:',date,key='box3.1')
 xmin3 = xmin1
-xmin3_dt = pd.to_datetime(xmin3)
+# xmin3_dt = pd.to_datetime(xmin3)
 
 
 #speed = 1/(st.slider('Speed of evolution',1,20))
@@ -677,7 +677,7 @@ for country, data in dict_choice3.items():
     df_temp = df_temp[['New Cases per Million']].rename(columns={'New Cases per Million': country})
     dfs.append(df_temp)
 combined_df = pd.concat(dfs, axis=1)
-st.line_chart(combined_df)
+st.line_chart(combined_df,x_label='Date',y_label='N')
 
 if st.button('Show Evolving Map',key='3.3'):
     datedate = datetime(2019,12,31)
