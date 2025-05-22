@@ -468,53 +468,93 @@ for country, data in dict_choice2.items():
 combined_df = pd.concat(dfs, axis=1)
 st.line_chart(combined_df,x_label='Date',y_label='N')
 
-if st.button('Show Evolving Map',key='2.3'):
-    datedate = datetime(2019,12,31)
+# if st.button('Show Evolving Map',key='2.3'):
+#     datedate = datetime(2019,12,31)
 
+#     view = pdk.ViewState(latitude=54,longitude=-2,zoom=0,)
+
+#     layer = pdk.Layer(
+#         'ScatterplotLayer',
+#         data=subset_data2[subset_data2['Date']=='2019-12-31'],
+#         get_position=['Longitude', 'Latitude'],
+#         pickable=False,
+#         opacity=0.1,
+#         stroked=True,
+#         filled=True,
+#         line_width_min_pixels=3,
+#         elevation_scale=4,
+#         get_radius='Radius',
+#         get_fill_color='[220, 0, 3]',
+#         get_line_color='[500,0,3]',
+#         tooltip="test test",
+#     )
+
+#     r = pdk.Deck(
+#             map_style='mapbox://styles/mapbox/dark-v9',
+#             initial_view_state=view,
+#             layers=[layer],
+#     )
+
+#     subheading = st.subheader("")
+
+#     map = st.pydeck_chart(r)
+
+#     # for i in date:
+#     #     # datedate += timedelta(days=1)
+#     #     datedate = next_month_first(datedate)
+#     #     layer.data = subset_data2[subset_data2['Date']==i]
+#     #     r.update()
+#     #     map.pydeck_chart(r)
+#     #     subheading.subheader("Daily number of tests per thousand : %s" % (datedate.strftime("%B %d, %Y")))
+#     #     time.sleep(0.1)
+
+#     # date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date]
+#     date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date if pd.to_datetime(d) > pd.to_datetime(xmin1) and pd.to_datetime(d) < max_date]
+#     first_of_month_dates = [d for d in date_dt if d.day == 1]
+#     for d in first_of_month_dates:
+#         layer.data = subset_data1[subset_data2['Date'] == d.strftime("%Y-%m-%d")]
+#         # r.update()
+#         map.pydeck_chart(r)
+#         subheading.subheader("Daily number of tests per thousand : %s" % (d.strftime("%B %d, %Y")))
+#         time.sleep(0.15)
+
+if st.button('Show Evolving Map',key='1.3'):
     view = pdk.ViewState(latitude=54,longitude=-2,zoom=0,)
 
-    layer = pdk.Layer(
-        'ScatterplotLayer',
-        data=subset_data2[subset_data2['Date']=='2019-12-31'],
-        get_position=['Longitude', 'Latitude'],
-        pickable=False,
-        opacity=0.1,
-        stroked=True,
-        filled=True,
-        line_width_min_pixels=3,
-        elevation_scale=4,
-        get_radius='Radius',
-        get_fill_color='[220, 0, 3]',
-        get_line_color='[500,0,3]',
-        tooltip="test test",
-    )
-
-    r = pdk.Deck(
-            map_style='mapbox://styles/mapbox/dark-v9',
-            initial_view_state=view,
-            layers=[layer],
-    )
-
-    subheading = st.subheader("")
-
-    map = st.pydeck_chart(r)
-
-    # for i in date:
-    #     # datedate += timedelta(days=1)
-    #     datedate = next_month_first(datedate)
-    #     layer.data = subset_data2[subset_data2['Date']==i]
-    #     r.update()
-    #     map.pydeck_chart(r)
-    #     subheading.subheader("Daily number of tests per thousand : %s" % (datedate.strftime("%B %d, %Y")))
-    #     time.sleep(0.1)
-
-    # date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date]
     date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date if pd.to_datetime(d) > pd.to_datetime(xmin1) and pd.to_datetime(d) < max_date]
     first_of_month_dates = [d for d in date_dt if d.day == 1]
+
+    subheading = st.subheader("")
+    map_placeholder = st.empty()
+
     for d in first_of_month_dates:
-        layer.data = subset_data1[subset_data2['Date'] == d.strftime("%Y-%m-%d")]
-        # r.update()
-        map.pydeck_chart(r)
+        daily_data = subset_data2[subset_data2['Date'] == d.strftime("%Y-%m-%d")]
+
+        layer = pdk.Layer(
+            'ScatterplotLayer',
+            # data=subset_data1[subset_data1['Date']=='2019-12-31'],
+            data = daily_data,
+            get_position='[Longitude, Latitude]',
+            pickable=False,
+            opacity=0.1,
+            stroked=True,
+            filled=True,
+            line_width_min_pixels=3,
+            elevation_scale=4,
+            get_radius='Radius',
+            get_fill_color='[220, 0, 3]',
+            get_line_color='[255,0,3]',
+            tooltip="test test",
+        )
+
+        r = pdk.Deck(
+                map_style='mapbox://styles/mapbox/dark-v9',
+                initial_view_state=view,
+                layers=[layer],
+        )
+
+        # map.pydeck_chart(r)
+        map_placeholder.pydeck_chart(r)
         subheading.subheader("Daily number of tests per thousand : %s" % (d.strftime("%B %d, %Y")))
         time.sleep(0.15)
 
@@ -684,55 +724,97 @@ for country, data in dict_choice3.items():
 combined_df = pd.concat(dfs, axis=1)
 st.line_chart(combined_df,x_label='Date',y_label='N')
 
-if st.button('Show Evolving Map',key='3.3'):
-    datedate = datetime(2019,12,31)
-
+if st.button('Show Evolving Map',key='1.3'):
     view = pdk.ViewState(latitude=54,longitude=-2,zoom=0,)
 
-    layer = pdk.Layer(
-        'ScatterplotLayer',
-        data=subset_data3[subset_data3['Date']=='2019-12-31'],
-        get_position=['Longitude', 'Latitude'],
-        pickable=False,
-        opacity=0.1,
-        stroked=True,
-        filled=True,
-        line_width_min_pixels=3,
-        elevation_scale=4,
-        get_radius='Radius',
-        get_fill_color='[220, 0, 3]',
-        get_line_color='[500,0,3]',
-        tooltip="test test",
-    )
-
-    r = pdk.Deck(
-            map_style='mapbox://styles/mapbox/dark-v9',
-            initial_view_state=view,
-            layers=[layer],
-    )
-
-    subheading = st.subheader("")
-
-    map = st.pydeck_chart(r)
-    
-    # for i in date:
-    #     # datedate += timedelta(days=1)
-    #     datedate = next_month_first(datedate)
-    #     layer.data = subset_data3[subset_data3['Date']==i]
-    #     r.update()
-    #     map.pydeck_chart(r)
-    #     subheading.subheader("Daily Cases per Million on : %s" % (datedate.strftime("%B %d, %Y")))
-    #     time.sleep(0.1)
-
-    # date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date]
     date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date if pd.to_datetime(d) > pd.to_datetime(xmin1) and pd.to_datetime(d) < max_date]
     first_of_month_dates = [d for d in date_dt if d.day == 1]
+
+    subheading = st.subheader("")
+    map_placeholder = st.empty()
+
     for d in first_of_month_dates:
-        layer.data = subset_data1[subset_data3['Date'] == d.strftime("%Y-%m-%d")]
-        # r.update()
-        map.pydeck_chart(r)
+        daily_data = subset_data3[subset_data3['Date'] == d.strftime("%Y-%m-%d")]
+
+        layer = pdk.Layer(
+            'ScatterplotLayer',
+            # data=subset_data1[subset_data1['Date']=='2019-12-31'],
+            data = daily_data,
+            get_position='[Longitude, Latitude]',
+            pickable=False,
+            opacity=0.1,
+            stroked=True,
+            filled=True,
+            line_width_min_pixels=3,
+            elevation_scale=4,
+            get_radius='Radius',
+            get_fill_color='[220, 0, 3]',
+            get_line_color='[255,0,3]',
+            tooltip="test test",
+        )
+
+        r = pdk.Deck(
+                map_style='mapbox://styles/mapbox/dark-v9',
+                initial_view_state=view,
+                layers=[layer],
+        )
+
+        # map.pydeck_chart(r)
+        map_placeholder.pydeck_chart(r)
+        # subheading.subheader("Daily number of tests per thousand : %s" % (d.strftime("%B %d, %Y")))
         subheading.subheader("Daily Cases per Million on : %s" % (d.strftime("%B %d, %Y")))
         time.sleep(0.15)
+
+
+# if st.button('Show Evolving Map',key='3.3'):
+#     datedate = datetime(2019,12,31)
+
+#     view = pdk.ViewState(latitude=54,longitude=-2,zoom=0,)
+
+#     layer = pdk.Layer(
+#         'ScatterplotLayer',
+#         data=subset_data3[subset_data3['Date']=='2019-12-31'],
+#         get_position=['Longitude', 'Latitude'],
+#         pickable=False,
+#         opacity=0.1,
+#         stroked=True,
+#         filled=True,
+#         line_width_min_pixels=3,
+#         elevation_scale=4,
+#         get_radius='Radius',
+#         get_fill_color='[220, 0, 3]',
+#         get_line_color='[500,0,3]',
+#         tooltip="test test",
+#     )
+
+#     r = pdk.Deck(
+#             map_style='mapbox://styles/mapbox/dark-v9',
+#             initial_view_state=view,
+#             layers=[layer],
+#     )
+
+#     subheading = st.subheader("")
+
+#     map = st.pydeck_chart(r)
+    
+#     # for i in date:
+#     #     # datedate += timedelta(days=1)
+#     #     datedate = next_month_first(datedate)
+#     #     layer.data = subset_data3[subset_data3['Date']==i]
+#     #     r.update()
+#     #     map.pydeck_chart(r)
+#     #     subheading.subheader("Daily Cases per Million on : %s" % (datedate.strftime("%B %d, %Y")))
+#     #     time.sleep(0.1)
+
+#     # date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date]
+#     date_dt = [datetime.strptime(d, "%Y-%m-%d") for d in date if pd.to_datetime(d) > pd.to_datetime(xmin1) and pd.to_datetime(d) < max_date]
+#     first_of_month_dates = [d for d in date_dt if d.day == 1]
+#     for d in first_of_month_dates:
+#         layer.data = subset_data1[subset_data3['Date'] == d.strftime("%Y-%m-%d")]
+#         # r.update()
+#         map.pydeck_chart(r)
+#         subheading.subheader("Daily Cases per Million on : %s" % (d.strftime("%B %d, %Y")))
+#         time.sleep(0.15)
 
 
 #fig3, ax3 = plt.subplots(figsize=(12,8))
